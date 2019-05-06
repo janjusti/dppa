@@ -1,6 +1,7 @@
 from pathlib import Path
 from Bio.SeqIO import FastaIO
 from anytree import AnyNode, RenderTree
+import pandas as pd
 
 class AuxFuncPack:
     # package of custom functions
@@ -8,11 +9,11 @@ class AuxFuncPack:
     def fasta_to_list(self, fastas_folder, fasta_fn):
         # convert .fasta file into a list
         # list format: [(name, seq)]
-        filepath = Path.cwd() / 'arq' / 'input' / fastas_folder / fasta_fn
+        filepath = Path.cwd() / 'batch' / fastas_folder / fasta_fn
         fasta_list = list(FastaIO.SimpleFastaParser(open(filepath, 'rU')))
         return fasta_list
 
-    def deep_searcher(self, fastas_folder, fasta_list, col_num):
+    def deep_searcher(self, fastas_folder, fasta_list, col_num, df_alert_results):
         # create local root
         loc_root = AnyNode(name='LocRoot')
         # create nodes from column number
@@ -26,10 +27,9 @@ class AuxFuncPack:
         for node in loc_root.children:
             # check amino cases
             if node.amino is '-':
+                # increment on df_alert_results
                 pass
-            if node.amino is 'X' or \
-                node.amino is 'B' or \
-                node.amino is 'Z':
+            if node.amino in ['X', 'B', 'Z']:
                 if 'consensus_sequence' in node.name:
                     fasta_dict = dict(fasta_list)
                     # check previous number of gaps from sequence
@@ -41,9 +41,9 @@ class AuxFuncPack:
                     deeper_fn = deeper_fn.replace(' consensus sequence','') + '.fasta'
                     deeper_list = self.fasta_to_list(fastas_folder, deeper_fn)
                     # go deeper
-                    self.deep_searcher(fastas_folder, deeper_list, shifted_col_num).parent = node
+                    self.deep_searcher(fastas_folder, deeper_list, shifted_col_num, df_alert_results).parent = node
                 else:
-                    # pure sequence, alert
+                    # pure sequence, increment on df_alert_results
                     pass
 
         return loc_root
