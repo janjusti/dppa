@@ -3,11 +3,13 @@
 import argparse
 import pandas as pd
 import numpy as np
+from tqdm import tqdm
 from pathlib import Path
 from src.helpers.auxfunc import AuxFuncPack
 
 def main(args):
 
+    print('Starting analysis for', args['target'], '@', args['input'])
     # create handler of custom functions
     auxf_handler = AuxFuncPack()
     # create list from .fasta target file
@@ -18,7 +20,7 @@ def main(args):
     # execute deep searcher 
     number_columns = len(target_list[0][1]) # number of chars on sequence
     # on each column from .fasta target file
-    for current_col in range(0, number_columns):
+    for current_col in tqdm(range(0, number_columns)):
         root, df_alert_results = auxf_handler.deep_searcher(
             args['input'], target_list, current_col, df_alert_results
         )
@@ -55,11 +57,14 @@ def main(args):
 
     # export dfs
     filepath = Path.cwd() / 'batch' / args['input'] / args['target']
-    alerts_filepath = str(filepath)+'-alerts.csv'
-    pols_filepath = str(filepath)+'-pols.csv'
+    alerts_filepath = str(filepath).replace('.fasta', '') + '-alerts.csv'
+    pols_filepath = str(filepath).replace('.fasta', '') + '-pols.csv'
+    print('Exporting alerts...')
     df_alert_results.to_csv(alerts_filepath, index=False)
+    print('Exporting polarity results...')
     df_pol_results.to_csv(pols_filepath, index=False)     
 
+    print('Done.')
     # end
 
 

@@ -1,6 +1,6 @@
 from pathlib import Path
 from Bio.SeqIO import FastaIO
-from anytree import AnyNode, RenderTree
+from anytree import AnyNode
 import pandas as pd
 
 class AuxFuncPack:

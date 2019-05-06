@@ -1,1 +1,2 @@
-# DPPA
+# DPPA (Deep Protein Polarity Analyser)
+
