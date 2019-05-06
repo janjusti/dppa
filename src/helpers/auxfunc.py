@@ -13,7 +13,7 @@ class AuxFuncPack:
         fasta_list = list(FastaIO.SimpleFastaParser(open(filepath, 'rU')))
         return fasta_list
 
-    def deep_searcher(self, fastas_folder, fasta_list, col_num, df_alert_results):
+    def deep_searcher(self, fastas_folder, fasta_list, col_num, df_alert):
         # create local root
         loc_root = AnyNode(name='LocRoot')
         # create nodes from column number
@@ -27,8 +27,14 @@ class AuxFuncPack:
         for node in loc_root.children:
             # check amino cases
             if node.amino is '-':
-                # increment on df_alert_results
-                pass
+                # increment on df_alert
+                df_alert = df_alert.append(
+                    {
+                        'SeqName': node.name.replace('_', ' '),
+                        'ColNum': col_num+1,
+                        'AlertType': 'Gap'
+                    }
+                , ignore_index=True)
             if node.amino in ['X', 'B', 'Z']:
                 if 'consensus_sequence' in node.name:
                     fasta_dict = dict(fasta_list)
@@ -41,9 +47,19 @@ class AuxFuncPack:
                     deeper_fn = deeper_fn.replace(' consensus sequence','') + '.fasta'
                     deeper_list = self.fasta_to_list(fastas_folder, deeper_fn)
                     # go deeper
-                    self.deep_searcher(fastas_folder, deeper_list, shifted_col_num, df_alert_results).parent = node
+                    deeper_result = self.deep_searcher(fastas_folder, deeper_list, shifted_col_num, df_alert)
+                    deeper_result[0].parent = node
+                    df_alert = deeper_result[1]
                 else:
-                    # pure sequence, increment on df_alert_results
+                    # pure sequence, increment on df_alert
+                    pure_str = 'Pure ' + node.amino
+                    df_alert = df_alert.append(
+                        {
+                            'SeqName': node.name.replace('_', ' '),
+                            'ColNum': col_num+1,
+                            'AlertType': pure_str
+                        }
+                    , ignore_index=True)
                     pass
 
-        return loc_root
+        return loc_root, df_alert

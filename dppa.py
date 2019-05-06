@@ -4,13 +4,9 @@ import argparse
 import pandas as pd
 import numpy as np
 from pathlib import Path
-from src.helpers.timer import CustomTimer
 from src.helpers.auxfunc import AuxFuncPack
 
 def main(args):
-
-    # initialize timer
-    c_timer = CustomTimer()
 
     # create handler of custom functions
     auxf_handler = AuxFuncPack()
@@ -18,12 +14,14 @@ def main(args):
     target_list = auxf_handler.fasta_to_list(args['input'], args['target'])
     # create dfs
     df_pol_results = pd.DataFrame(columns=['ColNum','PossibleAminos','PossiblePols'])
-    df_alert_results = pd.DataFrame(columns=['FileName','ColNum','AlertType','RowNum'])
+    df_alert_results = pd.DataFrame(columns=['SeqName','ColNum','AlertType'])
     # execute deep searcher 
     number_columns = len(target_list[0][1]) # number of chars on sequence
     # on each column from .fasta target file
     for current_col in range(0, number_columns):
-        root = auxf_handler.deep_searcher(args['input'], target_list, current_col, df_alert_results)
+        root, df_alert_results = auxf_handler.deep_searcher(
+            args['input'], target_list, current_col, df_alert_results
+        )
         # get root list of elements
         amino_leaves = []
         for leaf in root.leaves:
@@ -36,16 +34,24 @@ def main(args):
         # check length
         if len(unified_list) > 1:
             # get list of polarities
-            
+            filepath = Path.cwd() / 'src' / 'conv' / 'pols.csv'
+            df_pols = pd.read_csv(filepath)
+            curr_pol_list = []
+            for curr_pol in range(0, df_pols.shape[0]):
+                pol_amino_list = list(df_pols.Amino.at[curr_pol])
+                for curr_amino in unified_list:
+                    if curr_amino in pol_amino_list:
+                        curr_pol_list.append(df_pols.Type.at[curr_pol])
+            # unify polarity list
+            curr_pol_list = list(set(curr_pol_list))
             # increment on df_pol_results
             df_pol_results = df_pol_results.append(
-                {'ColNum': current_col+1,
-                'PossibleAminos': unified_list}
+                {
+                    'ColNum': current_col+1,
+                    'PossibleAminos': unified_list,
+                    'PossiblePols': curr_pol_list
+                }
             , ignore_index=True)
-    
-    # test
-    # from anytree import RenderTree
-    # print(RenderTree(root))
 
     # export dfs
     filepath = Path.cwd() / 'batch' / args['input'] / args['target']
@@ -55,7 +61,6 @@ def main(args):
     df_pol_results.to_csv(pols_filepath, index=False)     
 
     # end
-    c_timer.end()
 
 
 if __name__ == '__main__':
