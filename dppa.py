@@ -1,6 +1,7 @@
 ### Deep Protein Polarity Analyser (DPPA) v0.1
 ### Copyright (c) 2019 Jan Marans Agnella Justi & Mariana de França Costa
 import argparse
+import numpy as np
 from src.helpers.timer import CustomTimer
 from src.helpers.auxfunc import AuxFuncPack
 
@@ -11,20 +12,29 @@ def main(args):
 
     # create handler of custom functions
     auxf_handler = AuxFuncPack()
-    # create iterator from .fasta target file
-    target_iter = auxf_handler.fasta_to_iter(args['input'], args['target'])
+    # create list from .fasta target file
+    target_list = auxf_handler.fasta_to_list(args['input'], args['target'])
     # execute deep searcher 
-    # (?) better way to calculate this?
-    number_columns = len(str(list(target_iter)[0].seq))
+    number_columns = len(target_list[0][1]) # number of chars on sequence
     # on each column from .fasta target file
     for current_col in range(0, number_columns):
-        root = auxf_handler.deep_searcher(args['input'], target_iter, current_col)
+        root = auxf_handler.deep_searcher(args['input'], target_list, current_col)
         # get root list of elements
-        # remove unlisted chars (-, X)
+        amino_leaves = []
+        for leaf in root.leaves:
+            amino_leaves.append(leaf.amino)
+        # remove unlisted chars
+        blacklisted_str = ['-', 'X', 'B', 'Z']
+        amino_leaves = [x for x in amino_leaves if x not in blacklisted_str]
         # unify list
+        unified_list = list(set(amino_leaves))
+        print(current_col, unified_list)
         # check length
         # if > 1, ++pol_result
 
+    # test
+    # from anytree import RenderTree
+    # print(RenderTree(root))
 
     # export reports
     # end
