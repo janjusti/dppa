@@ -35,7 +35,7 @@ class AuxFuncPack:
                         'AlertType': 'Gap'
                     }
                 , ignore_index=True)
-            if node.amino in ['X', 'B', 'Z']:
+            if node.amino in ['X', 'B', 'Z', '?']:
                 if 'consensus_sequence' in node.name:
                     fasta_dict = dict(fasta_list)
                     # check previous number of gaps from sequence
