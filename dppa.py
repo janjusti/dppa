@@ -29,7 +29,7 @@ def main(args):
         for leaf in root.leaves:
             amino_leaves.append(leaf.amino)
         # remove unlisted chars
-        blacklisted_str = ['-', 'X', 'B', 'Z']
+        blacklisted_str = ['-', 'X', 'B', 'Z', '?']
         amino_leaves = [x for x in amino_leaves if x not in blacklisted_str]
         # unify list
         unified_list = list(set(amino_leaves))
