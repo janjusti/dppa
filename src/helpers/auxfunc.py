@@ -1,6 +1,6 @@
 from pathlib import Path
 from Bio.SeqIO import FastaIO
-from anytree import AnyNode, LevelOrderGroupIter, RenderTree
+from anytree import AnyNode, LevelOrderGroupIter
 import pandas as pd
 
 class AuxFuncPack:
@@ -78,16 +78,6 @@ class AuxFuncPack:
         curr_pol_list = list(set(curr_pol_list))
         return curr_pol_list
 
-    def export_dfs(self, folder_name, target_name, df_alert_results, df_pol_results):
-        # export alerts and pols df to csv
-        filepath = Path.cwd() / 'batch' / folder_name / target_name
-        alerts_filepath = str(filepath).replace('.fasta', '') + '-alerts.csv'
-        pols_filepath = str(filepath).replace('.fasta', '') + '-pols.csv'
-        print('Exporting alerts...')
-        df_alert_results.to_csv(alerts_filepath, index=False)
-        print('Exporting polarity results...')
-        df_pol_results.to_csv(pols_filepath, index=False) 
-
     def get_aminos_perc_dict(self, root, aminos_list):
         # convert list of aminos to dict (amino -> its perc)
         # get list of aminos levels
@@ -112,3 +102,13 @@ class AuxFuncPack:
             aminos_dict[target_amino] = round(total_perc,3)
 
         return aminos_dict
+
+    def export_dfs(self, folder_name, target_name, df_alert_results, df_pol_results):
+        # export alerts and pols df to csv
+        filepath = Path.cwd() / 'batch' / folder_name / target_name
+        alerts_filepath = str(filepath).replace('.fasta', '') + '-alerts.csv'
+        pols_filepath = str(filepath).replace('.fasta', '') + '-pols.csv'
+        print('Exporting alerts...')
+        df_alert_results.to_csv(alerts_filepath, index=False)
+        print('Exporting polarity results...')
+        df_pol_results.to_csv(pols_filepath, index=False) 
