@@ -37,11 +37,13 @@ def main(args):
         if len(unified_list) > 1:
             # get list of polarities
             curr_pol_list = auxf_handler.get_polarities_list(unified_list)
+            # get aminos percentages dict
+            aminos_dict = auxf_handler.get_aminos_perc_dict(root, unified_list)
             # increment on df_pol_results
             df_pol_results = df_pol_results.append(
                 {
                     'ColNum': current_col+1,
-                    'PossibleAminos': unified_list,
+                    'PossibleAminos': aminos_dict,
                     'PossiblePols': curr_pol_list
                 }
             , ignore_index=True)

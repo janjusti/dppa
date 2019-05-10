@@ -1,6 +1,6 @@
 from pathlib import Path
 from Bio.SeqIO import FastaIO
-from anytree import AnyNode
+from anytree import AnyNode, LevelOrderGroupIter, RenderTree
 import pandas as pd
 
 class AuxFuncPack:
@@ -15,7 +15,7 @@ class AuxFuncPack:
 
     def deep_searcher(self, fastas_folder, fasta_list, col_num, df_alert):
         # create local root
-        loc_root = AnyNode(name='LocRoot')
+        loc_root = AnyNode(name='LocRoot', amino='LocRootAmino')
         # create nodes from column number
         for row in range(0, len(fasta_list)):
             AnyNode(
@@ -87,3 +87,28 @@ class AuxFuncPack:
         df_alert_results.to_csv(alerts_filepath, index=False)
         print('Exporting polarity results...')
         df_pol_results.to_csv(pols_filepath, index=False) 
+
+    def get_aminos_perc_dict(self, root, aminos_list):
+        # convert list of aminos to dict (amino -> its perc)
+        # get list of aminos levels
+        aminos_levels = [[node.amino for node in children] for children in LevelOrderGroupIter(
+            root,
+            filter_=lambda n: n.amino != 'LocRootAmino'
+        )]
+        # clear any empty lists (parent roots)
+        aminos_levels = [x for x in aminos_levels if x]
+        # run through levels
+        deepables = ['X', 'B', 'Z']
+        aminos_dict = {}
+        for target_amino in aminos_list:
+            total_perc = 0
+            deepness_perc = 1
+            for level in aminos_levels:
+                amino_perc_on_lvl = (level.count(target_amino)/len(level))
+                total_perc = total_perc + (amino_perc_on_lvl)*deepness_perc
+                num_of_deepables = sum(level.count(x) for x in deepables)
+                deepables_perc_on_lvl = (num_of_deepables/len(level))
+                deepness_perc = deepness_perc * deepables_perc_on_lvl                
+            aminos_dict[target_amino] = round(total_perc,3)
+
+        return aminos_dict
