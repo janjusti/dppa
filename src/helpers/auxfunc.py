@@ -99,7 +99,7 @@ class AuxFuncPack:
                 num_of_deepables = sum(level.count(x) for x in deepables)
                 deepables_perc_on_lvl = (num_of_deepables/len(level))
                 deepness_perc = deepness_perc * deepables_perc_on_lvl                
-            aminos_dict[target_amino] = 100*round(total_perc,3)
+            aminos_dict[target_amino] = round(100*total_perc,3)
 
         return aminos_dict
 
