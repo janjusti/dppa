@@ -36,16 +36,7 @@ def main(args):
         # check length
         if len(unified_list) > 1:
             # get list of polarities
-            filepath = Path.cwd() / 'src' / 'conv' / 'pols.csv'
-            df_pols = pd.read_csv(filepath)
-            curr_pol_list = []
-            for curr_pol in range(0, df_pols.shape[0]):
-                pol_amino_list = list(df_pols.Amino.at[curr_pol])
-                for curr_amino in unified_list:
-                    if curr_amino in pol_amino_list:
-                        curr_pol_list.append(df_pols.Type.at[curr_pol])
-            # unify polarity list
-            curr_pol_list = list(set(curr_pol_list))
+            curr_pol_list = auxf_handler.get_polarities_list(unified_list)
             # increment on df_pol_results
             df_pol_results = df_pol_results.append(
                 {
@@ -55,14 +46,10 @@ def main(args):
                 }
             , ignore_index=True)
 
-    # export dfs
-    filepath = Path.cwd() / 'batch' / args['input'] / args['target']
-    alerts_filepath = str(filepath).replace('.fasta', '') + '-alerts.csv'
-    pols_filepath = str(filepath).replace('.fasta', '') + '-pols.csv'
-    print('Exporting alerts...')
-    df_alert_results.to_csv(alerts_filepath, index=False)
-    print('Exporting polarity results...')
-    df_pol_results.to_csv(pols_filepath, index=False)     
+    # export dfs to csv
+    auxf_handler.export_dfs(
+        args['input'], args['target'], df_alert_results, df_pol_results
+    )        
 
     print('Done.')
     # end

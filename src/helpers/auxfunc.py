@@ -36,7 +36,7 @@ class AuxFuncPack:
                     }
                 , ignore_index=True)
             if node.amino in ['X', 'B', 'Z', '?']:
-                if 'consensus_sequence' in node.name:
+                if 'consensus_sequence' in node.name: 
                     fasta_dict = dict(fasta_list)
                     # check previous number of gaps from sequence
                     num_gaps = fasta_dict[node.name][:col_num].count('-')
@@ -63,3 +63,27 @@ class AuxFuncPack:
                     pass
 
         return loc_root, df_alert
+
+    def get_polarities_list(self, amino_list):
+        # get list of polarities within aminos list
+        filepath = Path.cwd() / 'src' / 'conv' / 'pols.csv'
+        df_pols = pd.read_csv(filepath)
+        curr_pol_list = []
+        for curr_pol in range(0, df_pols.shape[0]):
+            pol_amino_list = list(df_pols.Amino.at[curr_pol])
+            for curr_amino in amino_list:
+                if curr_amino in pol_amino_list:
+                    curr_pol_list.append(df_pols.Type.at[curr_pol])
+        # unify polarity list
+        curr_pol_list = list(set(curr_pol_list))
+        return curr_pol_list
+
+    def export_dfs(self, folder_name, target_name, df_alert_results, df_pol_results):
+        # export alerts and pols df to csv
+        filepath = Path.cwd() / 'batch' / folder_name / target_name
+        alerts_filepath = str(filepath).replace('.fasta', '') + '-alerts.csv'
+        pols_filepath = str(filepath).replace('.fasta', '') + '-pols.csv'
+        print('Exporting alerts...')
+        df_alert_results.to_csv(alerts_filepath, index=False)
+        print('Exporting polarity results...')
+        df_pol_results.to_csv(pols_filepath, index=False) 
