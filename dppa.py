@@ -15,7 +15,7 @@ def main(args):
     # create list from .fasta target file
     target_list = auxf_handler.fasta_to_list(args['input'], args['target'])
     # create dfs
-    df_pol_results = pd.DataFrame(columns=['ColNum','PossibleAminos','PossiblePols'])
+    df_pol_results = pd.DataFrame(columns=['ColNum','PossibleAminos','PossiblePols', 'PolScore'])
     df_alert_results = pd.DataFrame(columns=['SeqName','ColNum','AlertType'])
     # execute deep searcher 
     number_columns = len(target_list[0][1]) # number of chars on sequence
@@ -35,16 +35,19 @@ def main(args):
         unified_list = list(set(amino_leaves))
         # check length
         if len(unified_list) > 1:
-            # get list of polarities
-            curr_pol_list = auxf_handler.get_polarities_list(unified_list)
             # get aminos percentages dict
             aminos_dict = auxf_handler.get_aminos_perc_dict(root, unified_list)
+            # get polarities percentages dict 
+            pols_dict = auxf_handler.get_polarities_perc_dict(aminos_dict)
+            # get polarity score
+            curr_pol_score = auxf_handler.get_pol_score(pols_dict)
             # increment on df_pol_results
             df_pol_results = df_pol_results.append(
                 {
                     'ColNum': current_col+1,
                     'PossibleAminos': aminos_dict,
-                    'PossiblePols': curr_pol_list
+                    'PossiblePols': pols_dict,
+                    'PolScore': curr_pol_score
                 }
             , ignore_index=True)
 

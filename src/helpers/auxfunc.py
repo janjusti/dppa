@@ -64,20 +64,6 @@ class AuxFuncPack:
 
         return loc_root, df_alert
 
-    def get_polarities_list(self, amino_list):
-        # get list of polarities within aminos list
-        filepath = Path.cwd() / 'src' / 'conv' / 'pols.csv'
-        df_pols = pd.read_csv(filepath)
-        curr_pol_list = []
-        for curr_pol in range(0, df_pols.shape[0]):
-            pol_amino_list = list(df_pols.Amino.at[curr_pol])
-            for curr_amino in amino_list:
-                if curr_amino in pol_amino_list:
-                    curr_pol_list.append(df_pols.Type.at[curr_pol])
-        # unify polarity list
-        curr_pol_list = list(set(curr_pol_list))
-        return curr_pol_list
-
     def get_aminos_perc_dict(self, root, aminos_list):
         # convert list of aminos to dict (amino -> its perc)
         # get list of aminos levels
@@ -102,6 +88,45 @@ class AuxFuncPack:
             aminos_dict[target_amino] = round(100*total_perc,3)
 
         return aminos_dict
+    
+    def get_polarities_perc_dict(self, aminos_dict):
+        # get dict of polarities within aminos list
+        filepath = Path.cwd() / 'src' / 'conv' / 'pols.csv'
+        df_pols = pd.read_csv(filepath)
+        # get list of tuples (pol_type -> perc)
+        list_percs = []
+        for curr_pol in range(0, df_pols.shape[0]):
+            pol_amino_list = list(df_pols.Amino.at[curr_pol])
+            for curr_amino in list(aminos_dict.items()):
+                if curr_amino[0] in pol_amino_list:
+                    list_percs.append((df_pols.Type.at[curr_pol], curr_amino[1]))
+        # convert into unified dict
+        pols_dict = {}
+        for key, value in list_percs:
+            pols_dict[key] = round(pols_dict.get(key, 0) + value, 2)
+
+        return pols_dict
+
+    def get_pol_score(self, pols_dict):
+        # calculate polarity score
+        # convert dict into list of tuples
+        pols_percs = list(pols_dict.items())
+        # get table of polarity scores
+        filepath = Path.cwd() / 'src' / 'conv' / 'pols.csv'
+        df_pols = pd.read_csv(filepath)
+        # get sum of current scores
+        sum_scores = 0
+        for curr_pol in pols_percs:
+            sum_scores += df_pols.loc[df_pols['Type'] == curr_pol[0], 'Score'].values[0]        
+        # get minimal value of perc
+        min_pols = min(pols_percs, key = lambda t: t[1])[1]
+        # calculate
+        pol_list_size = len(pols_percs)
+        if pol_list_size is 1:
+            pol_score = 0
+        else:
+            pol_score = round(sum_scores*0.9 + pol_list_size*0.1 + min_pols*0.01, 5)
+        return pol_score
 
     def export_dfs(self, folder_name, target_name, df_alert_results, df_pol_results):
         # export alerts and pols df to csv
