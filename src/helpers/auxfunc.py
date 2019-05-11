@@ -117,15 +117,15 @@ class AuxFuncPack:
         # get sum of current scores
         sum_scores = 0
         for curr_pol in pols_percs:
-            sum_scores += df_pols.loc[df_pols['Type'] == curr_pol[0], 'Score'].values[0]        
-        # get minimal value of perc
-        min_pols = min(pols_percs, key = lambda t: t[1])[1]
+            sum_scores += df_pols.loc[df_pols['Type'] == curr_pol[0], 'Score'].values[0]
         # calculate
         pol_list_size = len(pols_percs)
         if pol_list_size is 1:
             pol_score = 0
         else:
-            pol_score = round(sum_scores*0.9 + pol_list_size*0.1 + min_pols*0.01, 5)
+            # get minimal value of perc
+            min_pols = min(pols_percs, key = lambda t: t[1])[1]
+            pol_score = round(sum_scores*3 + pol_list_size*0.6 + min_pols*0.01, 5)
         return pol_score
 
     def export_dfs(self, folder_name, target_name, df_alert_results, df_pol_results):
