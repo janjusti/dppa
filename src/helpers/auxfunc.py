@@ -152,5 +152,9 @@ class AuxFuncPack:
         print('Exporting', df_alert_results.shape[0], 'alerts...')
         df_alert_results.to_csv(alerts_filepath, index=False)
         print('Exporting polarity results...')
-        print('MaxScore:', df_pol_results.at[df_pol_results['PolScore'].idxmax(), 'PolScore'])
+        # sorting by polscores
+        df_pol_results = df_pol_results.sort_values(
+            by=['PolScore'], ascending=False
+        ).reset_index(drop=True)
+        print('MaxScore:', df_pol_results.PolScore.at[0])
         df_pol_results.to_csv(pols_filepath, index=False) 
