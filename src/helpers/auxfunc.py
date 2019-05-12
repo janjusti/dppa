@@ -54,9 +54,10 @@ class AuxFuncPack:
             )
         # run through nodes
         for node in loc_root.children:
-            # check amino cases
+            # check if amino is possibly deepable
             if node.amino in unknown_aminos:
-                if 'consensus_sequence' in node.name: 
+                if 'consensus_sequence' in node.name and node.amino not in ['-', '?']: 
+                    # non-gap deepable char
                     fasta_dict = dict(fasta_list)
                     # check previous number of gaps from sequence
                     num_gaps = fasta_dict[node.name][:col_num].count('-')
