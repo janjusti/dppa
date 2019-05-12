@@ -149,7 +149,8 @@ class AuxFuncPack:
         filepath = Path.cwd() / 'batch' / folder_name / target_name
         alerts_filepath = str(filepath).replace('.fasta', '') + '-alerts.csv'
         pols_filepath = str(filepath).replace('.fasta', '') + '-pols.csv'
-        print('Exporting alerts... / Total:', df_alert_results.shape[0])
+        print('Exporting', df_alert_results.shape[0], 'alerts...')
         df_alert_results.to_csv(alerts_filepath, index=False)
         print('Exporting polarity results...')
+        print('MaxScore:', df_pol_results.at[df_pol_results['PolScore'].idxmax(), 'PolScore'])
         df_pol_results.to_csv(pols_filepath, index=False) 
