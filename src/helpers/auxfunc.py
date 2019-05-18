@@ -194,7 +194,7 @@ class AuxFuncPack:
             return ['background-color: #cec035']*s.shape[0]  
         elif ('Np' in pols_list and 'Nc' in pols_list):
             return ['background-color: #b1ce08']*s.shape[0]  
-        elif (len(pols_list) == 1):
+        elif (s.PolScore == 0):
             return ['background-color: #cbdeb7']*s.shape[0]
         else:
             return ''
