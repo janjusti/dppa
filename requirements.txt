@@ -1,5 +1,5 @@
 tqdm==4.31.1
 anytree==2.6.0
 pandas==0.24.2
-numpy==1.13.3
-Bio==0.1.0
+numpy==1.16.3
+biopython==1.73
