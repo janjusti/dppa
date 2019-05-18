@@ -146,15 +146,55 @@ class AuxFuncPack:
 
     def export_dfs(self, folder_name, target_name, df_alert_results, df_pol_results):
         ### export alerts and pols df to csv
-        filepath = Path.cwd() / 'batch' / folder_name / target_name
-        alerts_filepath = str(filepath).replace('.fasta', '') + '-alerts.csv'
-        pols_filepath = str(filepath).replace('.fasta', '') + '-pols.csv'
-        print('Exporting', df_alert_results.shape[0], 'alerts...')
-        df_alert_results.to_csv(alerts_filepath, index=False)
-        print('Exporting polarity results...')
+        folder_path = Path.cwd() / 'batch' / folder_name / target_name
         # sorting by polscores
         df_pol_results = df_pol_results.sort_values(
             by=['PolScore'], ascending=False
         ).reset_index(drop=True)
         print('MaxScore:', df_pol_results.PolScore.at[0])
-        df_pol_results.to_csv(pols_filepath, index=False) 
+        print('Exporting', df_alert_results.shape[0], 'alerts...')
+        print('Exporting polarity results...')
+        self.df_to_xls(
+            [df_pol_results, df_alert_results], 
+            ['Polarity', 'Alerts'], 
+            folder_path
+        )
+        #self.df_to_csv(df_alert_results, folder_path, 'alerts')
+        #self.df_to_csv(df_pol_results, folder_path, 'pols')
+
+    def df_to_csv(self, df, folder_path, fn_suffix):
+        file_path = str(folder_path).replace('.fasta', '') + '-' + fn_suffix + '.csv'
+        df.to_csv(file_path, index=False)
+
+    def df_to_xls(self, list_dfs, list_sheet_names, folder_path):
+        # create list of stylers based on dfs
+        list_stylers = []
+        for df in list_dfs:
+            list_stylers.append(df.style)
+        # apply cell patterns
+        list_stylers[0] = list_stylers[0].apply(self.highlight_pol_rows, axis=1)
+        # export
+        file_path = str(folder_path).replace('.fasta', '') + '-report.xls'
+        with pd.ExcelWriter(file_path, engine='xlsxwriter') as writer:
+            for df_idx in range(0, len(list_stylers)):
+                list_stylers[df_idx].to_excel(
+                    writer, sheet_name=list_sheet_names[df_idx], index=False
+                )
+
+    def highlight_pol_rows(self, s):
+        # get list of pols
+        pols_list = list(s.PossiblePols.keys())
+        if ('Pp' in pols_list and 'Pn' in pols_list and ('Np' in pols_list or 'Nc' in pols_list)):
+            return ['background-color: #d60202']*s.shape[0]
+        elif ('Pp' in pols_list and 'Pn' in pols_list):
+            return ['background-color: #d66802']*s.shape[0]
+        elif ('Pp' in pols_list and ('Np' in pols_list or 'Nc' in pols_list)):
+            return ['background-color: #d6c202']*s.shape[0]
+        elif ('Pn' in pols_list and ('Np' in pols_list or 'Nc' in pols_list)):
+            return ['background-color: #cec035']*s.shape[0]  
+        elif ('Np' in pols_list and 'Nc' in pols_list):
+            return ['background-color: #b1ce08']*s.shape[0]  
+        elif (len(pols_list) == 1):
+            return ['background-color: #cbdeb7']*s.shape[0]
+        else:
+            return ''
