@@ -208,7 +208,8 @@ class AuxFuncPack:
         np_mask = pol_sets.apply(lambda x: True if 'Np' in x else False)      
         # list all cases and its colour code
         list_cases = []
-        list_cases.append(tuple([sf[(pp_mask & pn_mask & (nc_mask | np_mask))], 'ff0000']))
+        list_cases.append(tuple([sf[(pp_mask & pn_mask & nc_mask & np_mask)], 'a80000']))
+        list_cases.append(tuple([sf[(pp_mask & pn_mask & (nc_mask ^ np_mask))], 'ff0000']))
         list_cases.append(tuple([sf[(pp_mask & pn_mask & ~(nc_mask | np_mask))], 'ff6400']))
         list_cases.append(tuple([sf[((pp_mask ^ pn_mask) & nc_mask & np_mask)], 'ff9200']))
         list_cases.append(tuple([sf[(pp_mask & ~pn_mask & (nc_mask ^ np_mask))], 'ffc800']))
