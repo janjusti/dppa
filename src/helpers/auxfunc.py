@@ -1,6 +1,8 @@
 from pathlib import Path
 from Bio.SeqIO import FastaIO
 from anytree import AnyNode, LevelOrderGroupIter
+from StyleFrame import StyleFrame, Styler, utils
+import numpy as np
 import pandas as pd
 import string
 
@@ -11,7 +13,7 @@ class AuxFuncPack:
         ### convert .fasta file into a list
         # list format: [(name, seq)]
         filepath = Path.cwd() / 'batch' / fastas_folder / fasta_fn
-        fasta_list = list(FastaIO.SimpleFastaParser(open(filepath, 'rU')))
+        fasta_list = list(FastaIO.SimpleFastaParser(open(filepath)))
 
         return fasta_list
 
@@ -154,47 +156,62 @@ class AuxFuncPack:
         print('MaxScore:', df_pol_results.PolScore.at[0])
         print('Exporting', df_alert_results.shape[0], 'alerts...')
         print('Exporting polarity results...')
+        # option 1: export to xls format
         self.df_to_xls(
             [df_pol_results, df_alert_results], 
             ['Polarity', 'Alerts'], 
             folder_path
         )
-        #self.df_to_csv(df_alert_results, folder_path, 'alerts')
-        #self.df_to_csv(df_pol_results, folder_path, 'pols')
+        # option 2: export to csv format
+        # self.df_to_csv(df_alert_results, folder_path, 'alerts')
+        # self.df_to_csv(df_pol_results, folder_path, 'pols')
 
     def df_to_csv(self, df, folder_path, fn_suffix):
         file_path = str(folder_path).replace('.fasta', '') + '-' + fn_suffix + '.csv'
         df.to_csv(file_path, index=False)
 
     def df_to_xls(self, list_dfs, list_sheet_names, folder_path):
-        # create list of stylers based on dfs
-        list_stylers = []
+        # create list of styleframes based on dfs
+        list_sfs = []
         for df in list_dfs:
-            list_stylers.append(df.style)
+            list_sfs.append(StyleFrame(df))
         # apply cell patterns
-        list_stylers[0] = list_stylers[0].apply(self.highlight_pol_rows, axis=1)
+        self.apply_highlights_pol_rows(list_sfs[0], list_dfs[0])
         # export
         file_path = str(folder_path).replace('.fasta', '') + '-report.xls'
-        with pd.ExcelWriter(file_path, engine='xlsxwriter') as writer:
-            for df_idx in range(0, len(list_stylers)):
-                list_stylers[df_idx].to_excel(
-                    writer, sheet_name=list_sheet_names[df_idx], index=False
+        # best_fit factors
+        StyleFrame.A_FACTOR = 5
+        StyleFrame.P_FACTOR = 1.1
+        with StyleFrame.ExcelWriter(file_path) as writer:
+            for df_idx in range(0, len(list_sfs)):
+                list_sfs[df_idx].to_excel(
+                    writer, 
+                    sheet_name=list_sheet_names[df_idx], 
+                    index=False,
+                    best_fit=list(list_dfs[df_idx].columns.values)
                 )
 
-    def highlight_pol_rows(self, s):
-        # get list of pols
-        pols_list = list(s.PossiblePols.keys())
-        if ('Pp' in pols_list and 'Pn' in pols_list and ('Np' in pols_list or 'Nc' in pols_list)):
-            return ['background-color: #d60202']*s.shape[0]
-        elif ('Pp' in pols_list and 'Pn' in pols_list):
-            return ['background-color: #d66802']*s.shape[0]
-        elif ('Pp' in pols_list and ('Np' in pols_list or 'Nc' in pols_list)):
-            return ['background-color: #d6c202']*s.shape[0]
-        elif ('Pn' in pols_list and ('Np' in pols_list or 'Nc' in pols_list)):
-            return ['background-color: #cec035']*s.shape[0]  
-        elif ('Np' in pols_list and 'Nc' in pols_list):
-            return ['background-color: #b1ce08']*s.shape[0]  
-        elif (s.PolScore == 0):
-            return ['background-color: #cbdeb7']*s.shape[0]
-        else:
-            return ''
+    def apply_highlights_pol_rows(self, sf, df):
+        # create masks based on row polarities
+        pol_sets = df.PossiblePols.apply(lambda x: set(x.keys()))
+        pn_mask = pol_sets.apply(lambda x: True if 'Pn' in x else False)
+        pp_mask = pol_sets.apply(lambda x: True if 'Pp' in x else False)
+        np_mask = pol_sets.apply(lambda x: True if 'Np' in x else False)
+        nc_mask = pol_sets.apply(lambda x: True if 'Nc' in x else False)
+        
+        # list all cases and its colour code
+        list_cases = []
+        list_cases.append(tuple([sf[(pp_mask & pn_mask & (np_mask | nc_mask))], 'da4545']))
+        list_cases.append(tuple([sf[(pp_mask & pn_mask)], 'da7645']))
+        list_cases.append(tuple([sf[(pp_mask & (np_mask | nc_mask))], 'dab145']))
+        list_cases.append(tuple([sf[(pn_mask & (np_mask | nc_mask))], 'e0aa1a']))
+        list_cases.append(tuple([sf[(np_mask & nc_mask)], 'd6da45']))
+        list_cases.append(tuple([sf[sf.PolScore == 0], 'bbde75']))            
+        
+        # apply
+        for case in list_cases:
+            sf.apply_style_by_indexes(
+                indexes_to_style=case[0],
+                styler_obj=Styler(bg_color=case[1])
+            )
+        # end
