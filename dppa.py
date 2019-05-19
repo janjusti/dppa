@@ -64,7 +64,7 @@ def main(args):
 
     # export dfs to csv
     auxf_handler.export_dfs(
-        args['input'], args['target'], df_alert_results, df_pol_results
+        args['input'], args['target'], args['report'], df_alert_results, df_pol_results
     )        
 
     print('Done.')
@@ -76,5 +76,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Analyse all protein alignment .fasta files.')
     parser.add_argument('-i', '--input', help='Input folder with .fasta files.', required=True)
     parser.add_argument('-t', '--target', help='Target .fasta file to be analysed.', required=True)
+    parser.add_argument('-r', '--report', help='Output report file type.', required=True, choices=['csv', 'xls', 'all'])
     user_args = vars(parser.parse_args())
     main(user_args)

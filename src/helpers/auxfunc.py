@@ -145,7 +145,7 @@ class AuxFuncPack:
 
         return pol_score
 
-    def export_dfs(self, folder_name, target_name, df_alert_results, df_pol_results):
+    def export_dfs(self, folder_name, target_name, report_type, df_alert_results, df_pol_results):
         ### export alerts and pols df to csv
         folder_path = Path.cwd() / 'batch' / folder_name / target_name
         # sorting by polscores
@@ -155,21 +155,24 @@ class AuxFuncPack:
         print('MaxScore:', df_pol_results.PolScore.at[0])
         print('Exporting', df_alert_results.shape[0], 'alerts...')
         print('Exporting polarity results...')
-        # option 1: export to xls format
-        df_list = []
-        sheetname_list = []
-        # check if there is any pol result
-        if df_pol_results.shape[0] > 0:
-            df_list.append(df_pol_results)
-            sheetname_list.append('Polarity')
-        # chech if there is any alert
-        if df_alert_results.shape[0] > 0:
-            df_list.append(df_alert_results)
-            sheetname_list.append('Alerts')
-        self.df_to_xls(df_list, sheetname_list, folder_path)
-        # option 2: export to csv format
-        # self.df_to_csv(df_alert_results, folder_path, 'alerts')
-        # self.df_to_csv(df_pol_results, folder_path, 'pols')
+        # check user option
+        if report_type == 'csv' or 'all':            
+            # option 1: export to csv format
+            self.df_to_csv(df_alert_results, folder_path, 'alerts')
+            self.df_to_csv(df_pol_results, folder_path, 'pols')
+        if report_type == 'xls' or 'all':
+            # option 2: export to xls format
+            df_list = []
+            sheetname_list = []
+            # check if there is any pol result
+            if df_pol_results.shape[0] > 0:
+                df_list.append(df_pol_results)
+                sheetname_list.append('Polarity')
+            # chech if there is any alert
+            if df_alert_results.shape[0] > 0:
+                df_list.append(df_alert_results)
+                sheetname_list.append('Alerts')
+            self.df_to_xls(df_list, sheetname_list, folder_path)
 
     def df_to_csv(self, df, folder_path, fn_suffix):
         file_path = str(folder_path).replace('.fasta', '') + '-' + fn_suffix + '.csv'
