@@ -2,7 +2,6 @@ from pathlib import Path
 from Bio.SeqIO import FastaIO
 from anytree import AnyNode, LevelOrderGroupIter
 from StyleFrame import StyleFrame, Styler, utils
-import numpy as np
 import pandas as pd
 import string
 
