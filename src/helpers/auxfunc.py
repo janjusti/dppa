@@ -156,11 +156,11 @@ class AuxFuncPack:
         print('Exporting', df_alert_results.shape[0], 'alerts...')
         print('Exporting polarity results...')
         # check user option
-        if report_type == 'csv' or 'all':            
+        if report_type == 'csv' or report_type == 'all':
             # option 1: export to csv format
             self.df_to_csv(df_alert_results, folder_path, 'alerts')
             self.df_to_csv(df_pol_results, folder_path, 'pols')
-        if report_type == 'xls' or 'all':
+        if report_type == 'xls' or report_type == 'all':
             # option 2: export to xls format
             df_list = []
             sheetname_list = []
