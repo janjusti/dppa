@@ -157,11 +157,17 @@ class AuxFuncPack:
         print('Exporting', df_alert_results.shape[0], 'alerts...')
         print('Exporting polarity results...')
         # option 1: export to xls format
-        self.df_to_xls(
-            [df_pol_results, df_alert_results], 
-            ['Polarity', 'Alerts'], 
-            folder_path
-        )
+        df_list = []
+        sheetname_list = []
+        # check if there is any pol result
+        if df_pol_results.shape[0] > 0:
+            df_list.append(df_pol_results)
+            sheetname_list.append('Polarity')
+        # chech if there is any alert
+        if df_alert_results.shape[0] > 0:
+            df_list.append(df_alert_results)
+            sheetname_list.append('Alerts')
+        self.df_to_xls(df_list, sheetname_list, folder_path)
         # option 2: export to csv format
         # self.df_to_csv(df_alert_results, folder_path, 'alerts')
         # self.df_to_csv(df_pol_results, folder_path, 'pols')
@@ -180,8 +186,8 @@ class AuxFuncPack:
         # export
         file_path = str(folder_path).replace('.fasta', '') + '-report.xls'
         # best_fit factors
-        StyleFrame.A_FACTOR = 5
-        StyleFrame.P_FACTOR = 1.1
+        StyleFrame.A_FACTOR = 6
+        StyleFrame.P_FACTOR = 1.3
         with StyleFrame.ExcelWriter(file_path) as writer:
             for df_idx in range(0, len(list_sfs)):
                 list_sfs[df_idx].to_excel(
@@ -194,20 +200,19 @@ class AuxFuncPack:
     def apply_highlights_pol_rows(self, sf, df):
         # create masks based on row polarities
         pol_sets = df.PossiblePols.apply(lambda x: set(x.keys()))
-        pn_mask = pol_sets.apply(lambda x: True if 'Pn' in x else False)
         pp_mask = pol_sets.apply(lambda x: True if 'Pp' in x else False)
-        np_mask = pol_sets.apply(lambda x: True if 'Np' in x else False)
-        nc_mask = pol_sets.apply(lambda x: True if 'Nc' in x else False)
-        
+        pn_mask = pol_sets.apply(lambda x: True if 'Pn' in x else False)
+        nc_mask = pol_sets.apply(lambda x: True if 'Nc' in x else False)  
+        np_mask = pol_sets.apply(lambda x: True if 'Np' in x else False)      
         # list all cases and its colour code
         list_cases = []
-        list_cases.append(tuple([sf[(pp_mask & pn_mask & (np_mask | nc_mask))], 'da4545']))
-        list_cases.append(tuple([sf[(pp_mask & pn_mask)], 'da7645']))
-        list_cases.append(tuple([sf[(pp_mask & (np_mask | nc_mask))], 'dab145']))
-        list_cases.append(tuple([sf[(pn_mask & (np_mask | nc_mask))], 'e0aa1a']))
-        list_cases.append(tuple([sf[(np_mask & nc_mask)], 'd6da45']))
-        list_cases.append(tuple([sf[sf.PolScore == 0], 'bbde75']))            
-        
+        list_cases.append(tuple([sf[(pp_mask & pn_mask & (nc_mask | np_mask))], 'ff0000']))
+        list_cases.append(tuple([sf[(pp_mask & pn_mask & ~(nc_mask | np_mask))], 'ff6400']))
+        list_cases.append(tuple([sf[((pp_mask ^ pn_mask) & nc_mask & np_mask)], 'ff9200']))
+        list_cases.append(tuple([sf[(pp_mask & ~pn_mask & (nc_mask ^ np_mask))], 'ffc800']))
+        list_cases.append(tuple([sf[(~pp_mask & pn_mask & (nc_mask ^ np_mask))], 'e3b200']))
+        list_cases.append(tuple([sf[~pp_mask & ~pn_mask & nc_mask & np_mask], 'fffe00']))
+        list_cases.append(tuple([sf[sf.PolScore == 0], 'b3ff00']))
         # apply
         for case in list_cases:
             sf.apply_style_by_indexes(
