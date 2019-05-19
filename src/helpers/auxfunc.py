@@ -186,7 +186,7 @@ class AuxFuncPack:
         # apply cell patterns
         self.apply_highlights_pol_rows(list_sfs[0], list_dfs[0])
         # export
-        file_path = str(folder_path).replace('.fasta', '') + '-report.xls'
+        file_path = str(folder_path).replace('.fasta', '') + '-report.xlsx'
         # best_fit factors
         StyleFrame.A_FACTOR = 6
         StyleFrame.P_FACTOR = 1.3
