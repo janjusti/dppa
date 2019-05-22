@@ -6,14 +6,15 @@ import numpy as np
 from tqdm import tqdm
 from pathlib import Path
 from src.helpers.auxfunc import AuxFuncPack
+from src.conv.export_dfs import DfExporter
 
-def main(args):
-
-    print('Starting analysis for', args['target'], '@', args['input'])
+def run(input_fn, target_fn):
+    # run analyser
+    print('Starting analysis for', target_fn, '@', input_fn)
     # create handler of custom functions
     auxf_handler = AuxFuncPack()
     # create list from .fasta target file
-    target_list = auxf_handler.fasta_to_list(args['input'], args['target'])
+    target_list = auxf_handler.fasta_to_list(input_fn, target_fn)
     # create dfs
     df_pol_results = pd.DataFrame(columns=['ColNum','PossibleAminos','PossiblePols', 'PolScore'])
     df_alert_results = pd.DataFrame(columns=['SeqName','ColNum','AlertType'])
@@ -25,7 +26,7 @@ def main(args):
     # on each column from .fasta target file
     for current_col in tqdm(range(0, number_columns)):
         root, df_alert_results = auxf_handler.deep_searcher(
-            args['input'], target_list, current_col, df_alert_results, unknown_aminos
+            input_fn, target_list, current_col, df_alert_results, unknown_aminos
         )
         # get root list of elements
         amino_leaves = []
@@ -61,11 +62,22 @@ def main(args):
                     'PolScore': curr_pol_score
                 }
             , ignore_index=True)
+    return df_pol_results, df_alert_results
+
+def export(folder_name, target_name, report_type, df_pol_results, df_alert_results):
+    # export dfs to csv
+    DfExporter().export_dfs(
+        folder_name, target_name, report_type, df_pol_results, df_alert_results 
+    ) 
+
+def run_and_export(args):
+    # run
+    [df_pol_results, df_alert_results] = run(args['input'], args['target'])
 
     # export dfs to csv
-    auxf_handler.export_dfs(
-        args['input'], args['target'], args['report'], df_alert_results, df_pol_results
-    )        
+    export(
+        args['input'], args['target'], args['report'], df_pol_results, df_alert_results 
+    ) 
 
     print('Done.')
     # end
@@ -73,9 +85,10 @@ def main(args):
 
 if __name__ == '__main__':
     # get options from user
-    parser = argparse.ArgumentParser(description='Analyse all protein alignment .fasta files.')
+    parser = argparse.ArgumentParser(description='Analyse all protein alignment .fasta files from a target.')
     parser.add_argument('-i', '--input', help='Input folder with .fasta files.', required=True)
     parser.add_argument('-t', '--target', help='Target .fasta file to be analysed.', required=True)
     parser.add_argument('-r', '--report', help='Output report file type.', required=True, choices=['csv', 'xls', 'all'])
     user_args = vars(parser.parse_args())
-    main(user_args)
+    # run and export results
+    run_and_export(user_args)
