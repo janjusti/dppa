@@ -11,28 +11,31 @@ class DfExporter():
         df_pol_results = df_pol_results.sort_values(
             by=['PolScore'], ascending=False
         ).reset_index(drop=True)
-        # check user option
-        if report_type == 'csv' or report_type == 'all':
-            # option 1: export to csv format
-            self.df_to_csv(df_pol_results, folder_path, 'pols')
-            self.df_to_csv(df_alert_results, folder_path, 'alerts')
-        if report_type == 'xls' or report_type == 'all':
-            # option 2: export to xls format
-            df_list = []
-            sheetname_list = []
-            # check if there is any pol result
-            if df_pol_results.shape[0] > 0:
-                df_list.append(df_pol_results)
-                sheetname_list.append('Polarity')
-            # chech if there is any alert
-            if df_alert_results.shape[0] > 0:
-                df_list.append(df_alert_results)
-                sheetname_list.append('Alerts')
-            self.df_to_xls(df_list, sheetname_list, folder_path)
-        # print results
-        print('MaxScore:', df_pol_results.PolScore.at[0])
-        print(df_alert_results.shape[0], 'alerts exported.')
-        print('Polarity results exported.')
+        # check if any
+        df_pols_size = df_pol_results.shape[0]
+        df_alert_size = df_alert_results.shape[0]
+        if df_pols_size != 0 or df_alert_size != 0:
+            # check user option
+            if report_type == 'csv' or report_type == 'all':
+                # option 1: export to csv format
+                self.df_to_csv(df_pol_results, folder_path, 'pols')
+                self.df_to_csv(df_alert_results, folder_path, 'alerts')
+            if report_type == 'xls' or report_type == 'all':
+                # option 2: export to xls format
+                df_list = []
+                sheetname_list = []
+                # check if there is any pol result
+                if df_pols_size > 0:
+                    df_list.append(df_pol_results)
+                    sheetname_list.append('Polarity')
+                # chech if there is any alert
+                if df_alert_size > 0:
+                    df_list.append(df_alert_results)
+                    sheetname_list.append('Alerts')
+                self.df_to_xls(df_list, sheetname_list, folder_path)
+            print(df_alert_results.shape[0], 'alerts exported.')
+            print('Polarity results exported.')
+            print('MaxScore:', df_pol_results.PolScore.at[0])
 
     def df_to_csv(self, df, folder_path, fn_suffix):
         file_path = str(folder_path).replace('.fasta', '') + '-' + fn_suffix + '.csv'
