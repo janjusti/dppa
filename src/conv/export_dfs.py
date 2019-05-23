@@ -5,9 +5,9 @@ from StyleFrame import StyleFrame, Styler, utils
 
 
 class DfExporter():
-    def export_dfs(self, folder_name, target_name, report_type, df_pol_results, df_alert_results):
+    def export_dfs(self, target_name, report_type, df_pol_results, df_alert_results):
         ### export alerts and pols df to csv
-        folder_path = Path.cwd() / 'batch' / folder_name / target_name
+        folder_path = Path.cwd() / target_name
         # sorting by polscores
         df_pol_results = df_pol_results.sort_values(
             by=['PolScore'], ascending=False
