@@ -1,4 +1,4 @@
-### Deep Protein Polarity Analyser (DPPA) v0.1
+### Deep Protein Polarity Analyser (DPPA)
 ### Copyright (c) 2019 Jan Marans Agnella Justi & Mariana de França Costa
 import logging
 import argparse
