@@ -9,7 +9,7 @@ pip install dppa
 Usage
 =================
 ```bash
-usage: dppa [-h] -t TARGET -r {csv,xls,all} [--debug]
+usage: rundppa [-h] -t TARGET -r {csv,xls,all} [--debug]
 
 Analyse all protein alignment .fasta files from a target.
 

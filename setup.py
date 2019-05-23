@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 from setuptools import setup, find_packages
 
-try:
-    long_description = open("README.md").read()
-except IOError:
-    long_description = ""
+with open("README.md", "r") as fh:
+    long_description = fh.read()
 
 setup(
     name="dppa",
@@ -12,6 +10,7 @@ setup(
     description="Deep Protein Polarity Analyser",
     license="MIT",
     author="Jan Justi",
+    author_email='jan.ma.justi@gmail.com',
     packages=find_packages(),
     install_requires=[
         "tqdm==4.31.1",
@@ -26,5 +25,11 @@ setup(
     classifiers=[
         "Programming Language :: Python",
         "Programming Language :: Python :: 3.6",
-    ]
+    ],
+    include_package_data=True,
+    entry_points={
+        'console_scripts': [
+            'rundppa = dppa.core:main'
+        ]
+    }
 )
