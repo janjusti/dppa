@@ -11,6 +11,7 @@ setup(
     license="MIT",
     author="Jan Justi",
     author_email='jan.ma.justi@gmail.com',
+    url='https://github.com/janjusti/dppa',
     packages=find_packages(),
     install_requires=[
         "tqdm==4.31.1",
