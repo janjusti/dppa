@@ -32,6 +32,7 @@ target_name = 'example.fasta'
 report_name = 'dppa-report'
 report_type = 'xls'
 
+dppa.set_debug_mode(True) # optional
 [results_dataframe, alerts_dataframe] = dppa.run(target_name)
 dppa.export(report_name, report_type, results_dataframe, alerts_dataframe)
 ```
