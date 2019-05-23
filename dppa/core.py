@@ -5,8 +5,8 @@ import argparse
 import pkg_resources
 import pandas as pd
 from tqdm import tqdm
-from .src.helpers import auxfunc
-from .src.conv import export_dfs
+from .src.helpers.auxfunc import AuxFuncPack
+from .src.conv.export_dfs import DfExporter
 
 def main():
     # get options from user
@@ -34,7 +34,7 @@ def run(target_fn):
     # run analyser
     logging.debug(f'Starting analysis for {target_fn}')
     # create handler of custom functions
-    auxf_handler = auxfunc.AuxFuncPack()
+    auxf_handler = AuxFuncPack()
     # create list from .fasta target file
     target_list = auxf_handler.fasta_to_list(target_fn)
     # create dfs
@@ -88,8 +88,7 @@ def run(target_fn):
 
 def export(report_name, report_type, df_pol_results, df_alert_results):
     # export dfs to csv
-    dfexp_handler = export_dfs.DfExporter()
-    dfexp_handler.export_dfs(
+    DfExporter().export_dfs(
         report_name, report_type, df_pol_results, df_alert_results
     )
 
