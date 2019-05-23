@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 import pandas as pd
 from StyleFrame import StyleFrame, Styler, utils
@@ -33,9 +34,9 @@ class DfExporter():
                     df_list.append(df_alert_results)
                     sheetname_list.append('Alerts')
                 self.df_to_xls(df_list, sheetname_list, folder_path)
-            print(df_alert_results.shape[0], 'alerts exported.')
-            print('Polarity results exported.')
-            print('MaxScore:', df_pol_results.PolScore.at[0])
+            logging.debug(f'{df_alert_results.shape[0]} alerts exported.')
+            logging.debug('Polarity results exported.')
+            logging.debug(f'MaxScore: {df_pol_results.PolScore.at[0]}')
 
     def df_to_csv(self, df, folder_path, fn_suffix):
         file_path = str(folder_path).replace('.fasta', '') + '-' + fn_suffix + '.csv'

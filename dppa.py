@@ -1,5 +1,6 @@
 ### Deep Protein Polarity Analyser (DPPA) v0.1
 ### Copyright (c) 2019 Jan Marans Agnella Justi & Mariana de França Costa
+import logging
 import argparse
 import pandas as pd
 import numpy as np
@@ -10,7 +11,7 @@ from src.conv.export_dfs import DfExporter
 
 def run(input_fn, target_fn):
     # run analyser
-    print('Starting analysis for', target_fn, '@', input_fn)
+    logging.debug(f'Starting analysis for {target_fn} @ {input_fn}')
     # create handler of custom functions
     auxf_handler = AuxFuncPack()
     # create list from .fasta target file
@@ -24,7 +25,8 @@ def run(input_fn, target_fn):
     # execute deep searcher 
     number_columns = len(target_list[0][1]) # number of chars on sequence
     # on each column from .fasta target file
-    for current_col in tqdm(range(0, number_columns)):
+    isDebugModeNotActive = not logging.getLogger().isEnabledFor(logging.DEBUG)
+    for current_col in tqdm(range(0, number_columns), disable=isDebugModeNotActive):
         root, df_alert_results = auxf_handler.deep_searcher(
             input_fn, target_list, current_col, df_alert_results, unknown_aminos
         )
@@ -78,10 +80,13 @@ def run_and_export(args):
     export(
         args['input'], args['target'], args['report'], df_pol_results, df_alert_results 
     ) 
-
-    print('Done.')
+    
+    logging.debug('Done.')
     # end
 
+def set_debug_mode(isActive):
+    curr_level = logging.DEBUG if isActive else logging.INFO
+    logging.basicConfig(level=curr_level, format='%(message)s')
 
 if __name__ == '__main__':
     # get options from user
@@ -89,6 +94,9 @@ if __name__ == '__main__':
     parser.add_argument('-i', '--input', help='Input folder with .fasta files.', required=True)
     parser.add_argument('-t', '--target', help='Target .fasta file to be analysed.', required=True)
     parser.add_argument('-r', '--report', help='Output report file type.', required=True, choices=['csv', 'xls', 'all'])
+    parser.add_argument('--debug', help='Turn debug messages on.', action='store_true')
     user_args = vars(parser.parse_args())
+    # config logging
+    set_debug_mode(user_args['debug'])
     # run and export results
     run_and_export(user_args)
