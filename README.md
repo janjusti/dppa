@@ -29,8 +29,9 @@ Using Python:
 import dppa
 
 target_name = 'example.fasta'
+report_name = 'dppa-report'
 report_type = 'xls'
 
 [results_dataframe, alerts_dataframe] = dppa.run(target_name)
-dppa.export(target_name, report_type, results_dataframe, alerts_dataframe)
+dppa.export(report_name, report_type, results_dataframe, alerts_dataframe)
 ```

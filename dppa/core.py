@@ -83,11 +83,11 @@ def run(target_fn):
                 }, ignore_index=True)
     return df_pol_results, df_alert_results
 
-def export(target_name, report_type, df_pol_results, df_alert_results):
+def export(report_name, report_type, df_pol_results, df_alert_results):
     # export dfs to csv
     dfexp_handler = export_dfs.DfExporter()
     dfexp_handler.export_dfs(
-        target_name, report_type, df_pol_results, df_alert_results
+        report_name, report_type, df_pol_results, df_alert_results
     )
 
 def run_and_export(args):
