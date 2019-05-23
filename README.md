@@ -11,16 +11,18 @@ Usage
 ----------------
 Terminal:
 ```bash
-usage: rundppa [-h] -t TARGET -r {csv,xls,all} [--debug]
+usage: rundppa [-h] --target TARGET --reportType {csv,xls,all}
+               [--reportName REPORTNAME] [--debug]
 
 Analyse all protein alignment .fasta files from a target.
 
 optional arguments:
   -h, --help            show this help message and exit
-  -t TARGET, --target TARGET
-                        Target .fasta file to be analysed.
-  -r {csv,xls,all}, --report {csv,xls,all}
+  --target TARGET       Target .fasta file to be analysed.
+  --reportType {csv,xls,all}
                         Output report file type.
+  --reportName REPORTNAME
+                        Output report file name.
   --debug               Turn debug messages on.
 ```
 Using Python:

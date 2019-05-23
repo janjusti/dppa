@@ -12,11 +12,14 @@ def main():
     # get options from user
     parser = argparse.ArgumentParser(description='Analyse all protein alignment .fasta files from a target.')
     parser.add_argument(
-        '-t', '--target', help='Target .fasta file to be analysed.', required=True
+        '--target', help='Target .fasta file to be analysed.', required=True
     )
     parser.add_argument(
-        '-r', '--report', help='Output report file type.', required=True, 
+        '--reportType', help='Output report file type.', required=True, 
         choices=['csv', 'xls', 'all']
+    )
+    parser.add_argument(
+        '--reportName', help='Output report file name.'
     )
     parser.add_argument(
         '--debug', help='Turn debug messages on.', action='store_true'
@@ -94,8 +97,9 @@ def run_and_export(args):
     # run
     [df_pol_results, df_alert_results] = run(args['target'])
     # export dfs to csv
+    report_name = args['reportName'] if (args['reportName'] is not None) else args['target']
     export(
-        args['target'], args['report'], df_pol_results, df_alert_results
+        report_name, args['reportType'], df_pol_results, df_alert_results
     )
     logging.debug('Done.')
     # end
