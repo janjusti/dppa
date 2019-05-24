@@ -33,7 +33,6 @@ def main():
 
 def run(target_fn):
     # run analyser
-    logging.basicConfig(level=logging.INFO, format='%(message)s')
     logging.debug(f'Starting analysis for {target_fn}')
     # create handler of custom functions
     auxf_handler = AuxFuncPack()
