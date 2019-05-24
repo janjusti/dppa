@@ -28,9 +28,9 @@ class DfExporter():
                 sheetname_list = ['Polarity', 'Alerts']
                 self.df_to_xls(df_list, sheetname_list, folder_path)
         else:
-            logging.info('WARNING: Nothing to export.')
+            logging.info('WARNING: Nothing to export. Both dfs are empty.')
         if (report_type not in ['csv', 'xls', 'all']):
-            logging.info('WARNING: Report not exported. Check report type.')
+            logging.info('WARNING: Invalid report type.')
 
     def df_to_csv(self, df, folder_path, fn_suffix):
         file_path = str(folder_path).replace('.fasta', '') + '-' + fn_suffix + '.csv'
