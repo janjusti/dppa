@@ -3,6 +3,7 @@ from Bio.SeqIO import FastaIO
 from anytree import AnyNode, LevelOrderGroupIter
 import pandas as pd
 import string
+import logging
 
 class AuxFuncPack:
     # package of custom functions
@@ -12,6 +13,12 @@ class AuxFuncPack:
         # list format: [(name, seq)]
         filepath = Path.cwd() / fasta_fn
         fasta_list = list(FastaIO.SimpleFastaParser(open(filepath)))
+        # check if all sequences have the same size
+        sizes_list = []
+        for fasta_idx in range(0, len(fasta_list)):
+            sizes_list.append(len(fasta_list[fasta_idx][1]))
+        if not all(x == sizes_list[0] for x in sizes_list):
+            logging.getLogger().info(f'WARNING: .fasta file has inconsistency: {fasta_fn}')
 
         return fasta_list
 
