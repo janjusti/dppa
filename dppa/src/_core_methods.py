@@ -26,17 +26,17 @@ class CoreMethods:
         parser.add_argument(
             '--debug', help='Turn debug messages on.', action='store_true'
         )
-        user_args = vars(parser.parse_args())
+        args = vars(parser.parse_args())
         # config logging
-        self.set_debug_mode(user_args['debug'])
-        # run and export results
-        self.start_run_and_export(user_args)
-
-    def start_export(self, report_name, report_type, results_df_list):
+        self.set_debug_mode(args['debug'])
+        # run
+        results_df_list = self.start_run(args['target'])
         # export dfs to csv
-        DfExporter().export_dfs(
-            report_name, report_type, results_df_list
+        report_name = args['reportName'] if (args['reportName'] is not None) else args['target']
+        self.start_export(
+            report_name, args['reportType'], results_df_list
         )
+        logging.debug('Done.')
     
     def start_run(self, target_fn):
         # run analyser
@@ -96,16 +96,11 @@ class CoreMethods:
         results_df_list = [df_pol_results, df_alert_results]
         return results_df_list
 
-    def start_run_and_export(self, args):
-        # run
-        results_df_list = self.start_run(args['target'])
+    def start_export(self, report_name, report_type, results_df_list):
         # export dfs to csv
-        report_name = args['reportName'] if (args['reportName'] is not None) else args['target']
-        self.start_export(
-            report_name, args['reportType'], results_df_list
+        DfExporter().export_dfs(
+            report_name, report_type, results_df_list
         )
-        logging.debug('Done.')
-        # end
     
     def set_debug_mode(self, isActive):
         curr_level = logging.DEBUG if isActive else logging.INFO
