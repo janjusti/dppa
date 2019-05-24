@@ -3,8 +3,8 @@ import logging
 from pathlib import PurePath
 from pandas import DataFrame, read_csv
 from tqdm import tqdm
-from .auxfunc import AuxFuncPack
-from ..conv.export_dfs import DfExporter
+from .helpers.auxfunc import AuxFuncPack
+from .conv.export_dfs import DfExporter
 
 logging.basicConfig(level=logging.INFO, format='%(message)s')
 
@@ -48,7 +48,7 @@ class CoreMethods:
         # create dfs
         df_pol_results = DataFrame(columns=['ColNum', 'PossibleAminos', 'PossiblePols', 'PolScore'])
         df_alert_results = DataFrame(columns=['SeqName', 'ColNum', 'AlertType'])
-        csv_path = PurePath(__file__).parent.parent.parent / 'data' / 'pols.csv'
+        csv_path = PurePath(__file__).parent.parent / 'data' / 'pols.csv'
         df_pols = read_csv(csv_path)
         # get list of unknown and known aminos
         [unknown_aminos, known_aminos] = auxf_handler.get_lists_aminos(df_pols)
