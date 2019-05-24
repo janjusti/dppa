@@ -12,11 +12,12 @@ def main():
     # get options from user
     parser = argparse.ArgumentParser(description='Analyse all protein alignment .fasta files from a target.')
     parser.add_argument(
-        '--target', help='Target .fasta file to be analysed.', required=True
+        'target', help='Target .fasta file to be analysed.', type=str,
+        metavar='TARGET'
     )
     parser.add_argument(
-        '--reportType', help='Output report file type.', required=True, 
-        choices=['csv', 'xls', 'all']
+        'reportType', help='Output report file type.', type=str,
+        choices=['csv', 'xls', 'all'], metavar='REPORTTYPE'
     )
     parser.add_argument(
         '--reportName', help='Output report file name.'
