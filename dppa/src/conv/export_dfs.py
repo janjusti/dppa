@@ -20,26 +20,17 @@ class DfExporter():
             # check user option
             if report_type == 'csv' or report_type == 'all':
                 # option 1: export to csv format
-                self.df_to_csv(df_pol_results, folder_path, 'pols')
-                self.df_to_csv(df_alert_results, folder_path, 'alerts')
+                if not df_pol_results.empty: self.df_to_csv(df_pol_results, folder_path, 'pols')
+                if not df_alert_results.empty: self.df_to_csv(df_alert_results, folder_path, 'alerts')
             if report_type == 'xls' or report_type == 'all':
                 # option 2: export to xls format
-                df_list = []
-                sheetname_list = []
-                # check if there is any pol result
-                if df_pols_size > 0:
-                    df_list.append(df_pol_results)
-                    sheetname_list.append('Polarity')
-                # chech if there is any alert
-                if df_alert_size > 0:
-                    df_list.append(df_alert_results)
-                    sheetname_list.append('Alerts')
+                df_list = [df_pol_results, df_alert_results]
+                sheetname_list = ['Polarity', 'Alerts']
                 self.df_to_xls(df_list, sheetname_list, folder_path)
-            logging.debug(f'{df_alert_results.shape[0]} alerts exported.')
-            logging.debug('Polarity results exported.')
-            logging.debug(f'MaxScore: {df_pol_results.PolScore.at[0]}')
+        else:
+            logging.info('WARNING: Nothing to export.')
         if (report_type not in ['csv', 'xls', 'all']):
-            logging.info(f'WARNING: Report not exported. Check report type.')
+            logging.info('WARNING: Report not exported. Check report type.')
 
     def df_to_csv(self, df, folder_path, fn_suffix):
         file_path = str(folder_path).replace('.fasta', '') + '-' + fn_suffix + '.csv'
@@ -50,8 +41,8 @@ class DfExporter():
         list_sfs = []
         for df in list_dfs:
             list_sfs.append(StyleFrame(df))
-        # apply cell patterns
-        self.apply_highlights_pol_rows(list_sfs[0], list_dfs[0])
+        # apply cell patterns if any
+        if not list_dfs[0].empty: self.apply_highlights_pol_rows(list_sfs[0], list_dfs[0])
         # export
         file_path = str(folder_path).replace('.fasta', '') + '-report.xlsx'
         # best_fit factors
@@ -59,12 +50,13 @@ class DfExporter():
         StyleFrame.P_FACTOR = 1.3
         with StyleFrame.ExcelWriter(file_path) as writer:
             for df_idx in range(0, len(list_sfs)):
-                list_sfs[df_idx].to_excel(
-                    writer, 
-                    sheet_name=list_sheet_names[df_idx], 
-                    index=False,
-                    best_fit=list(list_dfs[df_idx].columns.values)
-                )
+                if not list_dfs[df_idx].empty:
+                    list_sfs[df_idx].to_excel(
+                        writer, 
+                        sheet_name=list_sheet_names[df_idx], 
+                        index=False,
+                        best_fit=list(list_dfs[df_idx].columns.values)
+                    )
 
     def apply_highlights_pol_rows(self, sf, df):
         # create masks based on row polarities
