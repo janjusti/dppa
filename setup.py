@@ -30,7 +30,7 @@ setup(
     include_package_data=True,
     entry_points={
         'console_scripts': [
-            'run-dppa = dppa.core:main'
+            'run-dppa = dppa.core:_main'
         ]
     }
 )
