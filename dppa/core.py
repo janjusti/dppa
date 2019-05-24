@@ -3,7 +3,7 @@
 import logging
 import argparse
 import pkg_resources
-import pandas as pd
+from pandas import DataFrame, read_csv
 from tqdm import tqdm
 from .src.helpers.auxfunc import AuxFuncPack
 from .src.conv.export_dfs import DfExporter
@@ -39,9 +39,9 @@ def run(target_fn):
     # create list from .fasta target file
     target_list = auxf_handler.fasta_to_list(target_fn)
     # create dfs
-    df_pol_results = pd.DataFrame(columns=['ColNum', 'PossibleAminos', 'PossiblePols', 'PolScore'])
-    df_alert_results = pd.DataFrame(columns=['SeqName', 'ColNum', 'AlertType'])
-    df_pols = pd.read_csv(pkg_resources.resource_filename(__name__, 'data/pols.csv'))
+    df_pol_results = DataFrame(columns=['ColNum', 'PossibleAminos', 'PossiblePols', 'PolScore'])
+    df_alert_results = DataFrame(columns=['SeqName', 'ColNum', 'AlertType'])
+    df_pols = read_csv(pkg_resources.resource_filename(__name__, 'data/pols.csv'))
     # get list of unknown and known aminos
     [unknown_aminos, known_aminos] = auxf_handler.get_lists_aminos(df_pols)
     # execute deep searcher

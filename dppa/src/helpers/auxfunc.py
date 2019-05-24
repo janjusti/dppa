@@ -1,7 +1,6 @@
 from pathlib import Path
 from Bio.SeqIO import FastaIO
 from anytree import AnyNode, LevelOrderGroupIter
-import pandas as pd
 import string
 import logging
 
