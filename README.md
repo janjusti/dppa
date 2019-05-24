@@ -28,17 +28,17 @@ optional arguments:
 Python:
 
 ```python
-import dppa
+import dppa.core as pol_solver
 
 target_name = 'example.fasta'
 report_name = 'dppa-report'
 report_type = 'xls'
 
-dppa.set_debug_mode(True) # optional
+pol_solver.set_debug_mode(True) # optional
 
 # results[0] -> polarity results dataframe
 # results[1] -> alerts dataframe
-results = dppa.run(target_name)
+results = pol_solver.run(target_name)
 
-dppa.export(report_name, report_type, results)
+pol_solver.export(report_name, report_type, results)
 ```
