@@ -32,6 +32,7 @@ def main():
 
 def run(target_fn):
     # run analyser
+    logging.basicConfig(level=logging.INFO, format='%(message)s')
     logging.debug(f'Starting analysis for {target_fn}')
     # create handler of custom functions
     auxf_handler = AuxFuncPack()
@@ -105,4 +106,4 @@ def run_and_export(args):
 
 def set_debug_mode(isActive):
     curr_level = logging.DEBUG if isActive else logging.INFO
-    logging.basicConfig(level=curr_level, format='%(message)s')
+    logging.getLogger().setLevel(curr_level)
