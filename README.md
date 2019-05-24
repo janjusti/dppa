@@ -35,6 +35,10 @@ report_name = 'dppa-report'
 report_type = 'xls'
 
 dppa.set_debug_mode(True) # optional
-[results_dataframe, alerts_dataframe] = dppa.run(target_name)
-dppa.export(report_name, report_type, results_dataframe, alerts_dataframe)
+
+# results[0] -> polarity results dataframe
+# results[1] -> alerts dataframe
+results = dppa.run(target_name)
+
+dppa.export(report_name, report_type, results)
 ```

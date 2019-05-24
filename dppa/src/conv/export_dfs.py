@@ -4,9 +4,11 @@ import pandas as pd
 from StyleFrame import StyleFrame, Styler, utils
 
 class DfExporter():
-    def export_dfs(self, report_name, report_type, df_pol_results, df_alert_results):
+    def export_dfs(self, report_name, report_type, results_df_list):
         ### export alerts and pols df to csv
         folder_path = Path.cwd() / report_name
+        # extract dfs from list
+        [df_pol_results, df_alert_results] = results_df_list
         # sorting by polscores
         df_pol_results = df_pol_results.sort_values(
             by=['PolScore'], ascending=False
@@ -14,7 +16,7 @@ class DfExporter():
         # check if any
         df_pols_size = df_pol_results.shape[0]
         df_alert_size = df_alert_results.shape[0]
-        if df_pols_size != 0 or df_alert_size != 0:
+        if (df_pols_size != 0 or df_alert_size != 0):
             # check user option
             if report_type == 'csv' or report_type == 'all':
                 # option 1: export to csv format
@@ -36,6 +38,8 @@ class DfExporter():
             logging.debug(f'{df_alert_results.shape[0]} alerts exported.')
             logging.debug('Polarity results exported.')
             logging.debug(f'MaxScore: {df_pol_results.PolScore.at[0]}')
+        if (report_type not in ['csv', 'xls', 'all']):
+            logging.info(f'WARNING: Report not exported. Check report type.')
 
     def df_to_csv(self, df, folder_path, fn_suffix):
         file_path = str(folder_path).replace('.fasta', '') + '-' + fn_suffix + '.csv'

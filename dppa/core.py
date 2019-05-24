@@ -85,21 +85,22 @@ def run(target_fn):
                     'PossiblePols': pols_dict,
                     'PolScore': curr_pol_score
                 }, ignore_index=True)
-    return df_pol_results, df_alert_results
+    results_df_list = [df_pol_results, df_alert_results]
+    return results_df_list
 
-def export(report_name, report_type, df_pol_results, df_alert_results):
+def export(report_name, report_type, results_df_list):
     # export dfs to csv
     DfExporter().export_dfs(
-        report_name, report_type, df_pol_results, df_alert_results
+        report_name, report_type, results_df_list
     )
 
 def run_and_export(args):
     # run
-    [df_pol_results, df_alert_results] = run(args['target'])
+    results_df_list = run(args['target'])
     # export dfs to csv
     report_name = args['reportName'] if (args['reportName'] is not None) else args['target']
     export(
-        report_name, args['reportType'], df_pol_results, df_alert_results
+        report_name, args['reportType'], results_df_list
     )
     logging.debug('Done.')
     # end
