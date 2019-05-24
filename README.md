@@ -9,23 +9,23 @@ pip install dppa
 
 Usage
 ----------------
-Terminal:
+Bash:
 ```bash
-usage: rundppa [-h] --target TARGET --reportType {csv,xls,all}
-               [--reportName REPORTNAME] [--debug]
+usage: run-dppa [-h] [--reportName REPORTNAME] [--debug] TARGET REPORTTYPE
 
 Analyse all protein alignment .fasta files from a target.
 
+positional arguments:
+  TARGET                Target .fasta file to be analysed.
+  REPORTTYPE            Output report file type.
+
 optional arguments:
   -h, --help            show this help message and exit
-  --target TARGET       Target .fasta file to be analysed.
-  --reportType {csv,xls,all}
-                        Output report file type.
   --reportName REPORTNAME
                         Output report file name.
   --debug               Turn debug messages on.
 ```
-Using Python:
+Python:
 
 ```python
 import dppa
