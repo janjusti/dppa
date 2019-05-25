@@ -1,15 +1,16 @@
 DPPA (Deep Protein Polarity Analyser)
-=================
+=====================================
 
 Installation
------------------
+------------
 ```bash
-pip install dppa
+pip install dppa --user
 ```
 
 Usage
-----------------
-Bash:
+-----
+CLI:
+
 ```bash
 usage: run-dppa [-h] [--reportName REPORTNAME] [--debug] TARGET REPORTTYPE
 
@@ -25,6 +26,7 @@ optional arguments:
                         Output report file name.
   --debug               Turn debug messages on.
 ```
+
 Python:
 
 ```python

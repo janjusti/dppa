@@ -23,6 +23,7 @@ setup(
         "styleframe==2.0.3"
     ],
     long_description=long_description,
+    long_description_content_type='text/markdown',
     classifiers=[
         "Programming Language :: Python",
         "Programming Language :: Python :: 3.6",
