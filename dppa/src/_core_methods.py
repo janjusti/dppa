@@ -31,7 +31,7 @@ class CoreMethods:
         self.set_debug_mode(args['debug'])
         # run
         results_df_list = self.start_run(args['target'])
-        # export dfs to csv
+        # export dfs
         report_name = args['reportName'] if (args['reportName'] is not None) else args['target']
         self.start_export(
             report_name, args['reportType'], results_df_list
@@ -97,7 +97,7 @@ class CoreMethods:
         return results_df_list
 
     def start_export(self, report_name, report_type, results_df_list):
-        # export dfs to csv
+        # export dfs
         DfExporter().export_dfs(
             report_name, report_type, results_df_list
         )
