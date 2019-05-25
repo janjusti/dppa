@@ -48,7 +48,7 @@ class AuxFuncPack:
 
         return unknown_aminos, known_aminos
 
-    def deep_searcher(self, fasta_list, col_num, df_alert, unknown_aminos):
+    def deep_searcher(self, fasta_folder, fasta_list, col_num, df_alert, unknown_aminos):
         # create local root
         loc_root = AnyNode(name='LocRoot', amino='LocRootAmino')
         # create nodes from column number
@@ -72,9 +72,10 @@ class AuxFuncPack:
                     # get fasta_list of this node's original sequence
                     deeper_fn = node.name.replace('_', ' ') 
                     deeper_fn = deeper_fn.replace(' consensus sequence','') + '.fasta'
-                    deeper_list = self.fasta_to_list(deeper_fn)
+                    deeper_path = str(fasta_folder) + '/' + deeper_fn
+                    deeper_list = self.fasta_to_list(deeper_path)
                     # go deeper
-                    deeper_result = self.deep_searcher(deeper_list, shifted_col_num, df_alert, unknown_aminos)
+                    deeper_result = self.deep_searcher(fasta_folder, deeper_list, shifted_col_num, df_alert, unknown_aminos)
                     deeper_result[0].parent = node
                     df_alert = deeper_result[1]
                 else:

@@ -21,7 +21,10 @@ class CoreMethods:
             choices=['csv', 'xls', 'all'], metavar='REPORTTYPE'
         )
         parser.add_argument(
-            '--reportName', help='Output report file name.'
+            '--reportName', help='Output report custom file name.'
+        )
+        parser.add_argument(
+            '--reportPath', help='Output report custom file path.'
         )
         parser.add_argument(
             '--debug', help='Turn debug messages on.', action='store_true'
@@ -32,19 +35,22 @@ class CoreMethods:
         # run
         results_df_list = self.start_run(args['target'])
         # export dfs
-        report_name = args['reportName'] if (args['reportName'] is not None) else args['target']
+        target_fn = PurePath(args['target']).name
+        report_path = args['reportPath'] if (args['reportPath'] is not None) else PurePath(args['target']).parent
+        report_name = args['reportName'] if (args['reportName'] is not None) else target_fn
         self.start_export(
-            report_name, args['reportType'], results_df_list
+            results_df_list, args['reportType'], report_name, report_path
         )
         logging.debug('Done.')
     
-    def start_run(self, target_fn):
+    def start_run(self, target_path):
         # run analyser
-        logging.debug(f'Starting analysis for {target_fn}')
+        logging.debug(f'Starting analysis for {target_path}')
         # create handler of custom functions
         auxf_handler = AuxFuncPack()
         # create list from .fasta target file
-        target_list = auxf_handler.fasta_to_list(target_fn)
+        target_folder = PurePath(target_path).parent
+        target_list = auxf_handler.fasta_to_list(target_path)
         # create dfs
         df_pol_results = DataFrame(columns=['ColNum', 'PossibleAminos', 'PossiblePols', 'PolScore'])
         df_alert_results = DataFrame(columns=['SeqName', 'ColNum', 'AlertType'])
@@ -58,7 +64,7 @@ class CoreMethods:
         isDebugModeNotActive = not logging.getLogger().isEnabledFor(logging.DEBUG)
         for current_col in tqdm(range(0, number_columns), disable=isDebugModeNotActive):
             root, df_alert_results = auxf_handler.deep_searcher(
-                target_list, current_col, df_alert_results, unknown_aminos
+                target_folder, target_list, current_col, df_alert_results, unknown_aminos
             )
             # get root list of elements
             amino_leaves = []
@@ -96,10 +102,10 @@ class CoreMethods:
         results_df_list = [df_pol_results, df_alert_results]
         return results_df_list
 
-    def start_export(self, report_name, report_type, results_df_list):
+    def start_export(self, report_path, report_name, report_type, results_df_list):
         # export dfs
         DfExporter().export_dfs(
-            report_name, report_type, results_df_list
+            report_path, report_name, report_type, results_df_list
         )
     
     def set_debug_mode(self, isActive):

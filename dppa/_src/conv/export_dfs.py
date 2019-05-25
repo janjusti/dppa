@@ -3,9 +3,9 @@ from pathlib import Path
 from StyleFrame import StyleFrame, Styler, utils
 
 class DfExporter():
-    def export_dfs(self, report_name, report_type, results_df_list):
+    def export_dfs(self, results_df_list, report_type, report_name, report_path):
         ### export alerts and pols df to csv
-        folder_path = Path.cwd() / report_name
+        folder_path = Path.cwd() / report_path / report_name
         # extract dfs from list
         [df_pol_results, df_alert_results] = results_df_list
         # sorting by polscores
@@ -32,7 +32,7 @@ class DfExporter():
             logging.info('WARNING: Invalid report type.')
 
     def df_to_csv(self, df, folder_path, fn_suffix):
-        file_path = str(folder_path).replace('.fasta', '') + '-' + fn_suffix + '.csv'
+        file_path = self.ext_remover(str(folder_path), '.fasta') + '-' + fn_suffix + '.csv'
         if not df.empty: df.to_csv(file_path, index=False)
 
     def df_to_xls(self, list_dfs, list_sheet_names, folder_path):
@@ -43,7 +43,7 @@ class DfExporter():
         # apply cell patterns if any
         if not list_dfs[0].empty: self.apply_highlights_pol_rows(list_sfs[0], list_dfs[0])
         # export
-        file_path = str(folder_path).replace('.fasta', '') + '-report.xlsx'
+        file_path = self.ext_remover(str(folder_path), '.fasta') + '-report.xlsx'
         # best_fit factors
         StyleFrame.A_FACTOR = 6
         StyleFrame.P_FACTOR = 1.3
@@ -81,3 +81,8 @@ class DfExporter():
                 styler_obj=Styler(bg_color=case[1])
             )
         # end
+
+    def ext_remover(self, name, ext):
+        if name[-(len(ext)):] == ext: 
+            name = name[:-(len(ext))]
+        return name 

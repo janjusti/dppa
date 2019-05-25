@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="dppa",
-    version="0.1.0",
+    version="0.1.1",
     description="Deep Protein Polarity Analyser",
     license="MIT",
     author="Jan Justi",

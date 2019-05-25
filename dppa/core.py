@@ -8,11 +8,11 @@ _cmh = _core_methods.CoreMethods()
 def _main():
     _cmh.start_main()
 
-def run(target_fn):
-    return _cmh.start_run(target_fn)
+def run(target_path):
+    return _cmh.start_run(target_path)
 
-def export(report_name, report_type, results_df_list):
-    _cmh.start_export(report_name, report_type, results_df_list)
+def export(results_df_list, report_type, report_name, report_path='.'):
+    _cmh.start_export(results_df_list, report_type, report_name, report_path)
 
 def set_debug_mode(isActive):
     _cmh.set_debug_mode(isActive)
