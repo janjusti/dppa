@@ -19,8 +19,8 @@ class DfExporter():
             # check user option
             if report_type == 'csv' or report_type == 'all':
                 # option 1: export to csv format
-                if not df_pol_results.empty: self.df_to_csv(df_pol_results, folder_path, 'pols')
-                if not df_alert_results.empty: self.df_to_csv(df_alert_results, folder_path, 'alerts')
+                self.df_to_csv(df_pol_results, folder_path, 'pols')
+                self.df_to_csv(df_alert_results, folder_path, 'alerts')
             if report_type == 'xls' or report_type == 'all':
                 # option 2: export to xls format
                 df_list = [df_pol_results, df_alert_results]
@@ -33,7 +33,7 @@ class DfExporter():
 
     def df_to_csv(self, df, folder_path, fn_suffix):
         file_path = str(folder_path).replace('.fasta', '') + '-' + fn_suffix + '.csv'
-        df.to_csv(file_path, index=False)
+        if not df.empty: df.to_csv(file_path, index=False)
 
     def df_to_xls(self, list_dfs, list_sheet_names, folder_path):
         # create list of styleframes based on dfs
