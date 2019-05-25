@@ -1,7 +1,7 @@
 ### Deep Protein Polarity Analyser (DPPA)
 ### Copyright (c) 2019 Jan Marans Agnella Justi & Mariana de França Costa
 
-from .src import _core_methods
+from ._src import _core_methods
 
 _cmh = _core_methods.CoreMethods()
 
