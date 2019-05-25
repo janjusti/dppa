@@ -3,16 +3,16 @@
 
 from .src import _core_methods
 
-_core_methods_handler = _core_methods.CoreMethods()
+_cmh = _core_methods.CoreMethods()
 
 def _main():
-    _core_methods_handler.start_main()
+    _cmh.start_main()
 
 def run(target_fn):
-    return _core_methods_handler.start_run(target_fn)
+    return _cmh.start_run(target_fn)
 
 def export(report_name, report_type, results_df_list):
-    _core_methods_handler.start_export(report_name, report_type, results_df_list)
+    _cmh.start_export(report_name, report_type, results_df_list)
 
 def set_debug_mode(isActive):
-    _core_methods_handler.set_debug_mode(isActive)
+    _cmh.set_debug_mode(isActive)
