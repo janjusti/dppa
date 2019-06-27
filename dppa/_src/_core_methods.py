@@ -58,11 +58,10 @@ class CoreMethods:
         df_pols = read_csv(csv_path)
         # get list of unknown and known aminos
         [unknown_aminos, known_aminos] = auxf_handler.get_lists_aminos(df_pols)
-        # execute deep searcher
+        # execute deep searcher on each column from .fasta target file
         number_columns = len(target_list[0][1]) # number of chars on sequence
-        # on each column from .fasta target file
-        isDebugModeNotActive = not logging.getLogger().isEnabledFor(logging.DEBUG)
-        for current_col in tqdm(range(0, number_columns), disable=isDebugModeNotActive):
+        isDebugModeActive = logging.getLogger().isEnabledFor(logging.DEBUG)
+        for current_col in tqdm(range(0, number_columns), disable=not isDebugModeActive):
             root, df_alert_results = auxf_handler.deep_searcher(
                 target_folder, target_list, current_col, df_alert_results, unknown_aminos
             )
