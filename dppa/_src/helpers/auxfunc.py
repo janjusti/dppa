@@ -9,9 +9,14 @@ class AuxFuncPack:
 
     def fasta_to_list(self, fasta_fn):
         ### convert .fasta file into a list
-        # list format: [(name, seq)]
         filepath = Path.cwd() / fasta_fn
+        # original list format: [(name, seq)]
         fasta_list = list(FastaIO.SimpleFastaParser(open(filepath)))
+        # converting to list of lists (instead of list of tuples)
+        fasta_list = list(map(list, fasta_list))
+        # replace underscores for spaces
+        for fasta_idx in range(0, len(fasta_list)):
+            fasta_list[fasta_idx][0] = fasta_list[fasta_idx][0].replace('_', ' ')                
         # check if all sequences have the same size
         sizes_list = []
         for fasta_idx in range(0, len(fasta_list)):
@@ -62,7 +67,7 @@ class AuxFuncPack:
         for node in loc_root.children:
             # check if amino is possibly deepable
             if node.amino in unknown_aminos:
-                if 'consensus_sequence' in node.name and node.amino not in ['-', '?']: 
+                if 'consensus sequence' in node.name and node.amino not in ['-', '?']: 
                     # non-gap deepable char
                     fasta_dict = dict(fasta_list)
                     # check previous number of gaps from sequence
@@ -70,8 +75,7 @@ class AuxFuncPack:
                     # shift column number to the correct one
                     shifted_col_num = col_num-num_gaps
                     # get fasta_list of this node's original sequence
-                    deeper_fn = node.name.replace('_', ' ') 
-                    deeper_fn = deeper_fn.replace(' consensus sequence','') + '.fasta'
+                    deeper_fn = node.name.replace(' consensus sequence','') + '.fasta'
                     deeper_path = str(fasta_folder) + '/' + deeper_fn
                     deeper_list = self.fasta_to_list(deeper_path)
                     # go deeper
