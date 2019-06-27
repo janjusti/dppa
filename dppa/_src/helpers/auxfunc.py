@@ -79,7 +79,7 @@ class AuxFuncPack:
                     deeper_result[0].parent = node
                     df_alert = deeper_result[1]
                 else:
-                    # non-deepable char, increment on df_ale
+                    # non-deepable char, increment on df_alert
                     df_alert = self.add_alert_on_df(
                         df_alert, 
                         node.name,
