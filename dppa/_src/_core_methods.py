@@ -102,10 +102,10 @@ class CoreMethods:
         results_df_list = [df_pol_results, df_alert_results]
         return results_df_list
 
-    def start_export(self, report_path, report_name, report_type, results_df_list):
+    def start_export(self, results_df_list, report_type, report_name, report_path):
         # export dfs
         DfExporter().export_dfs(
-            report_path, report_name, report_type, results_df_list
+            results_df_list, report_type, report_name, report_path
         )
     
     def set_debug_mode(self, isActive):
