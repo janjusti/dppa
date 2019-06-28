@@ -13,7 +13,7 @@ CLI:
 
 ```bash
 usage: run-dppa [-h] [--reportName REPORTNAME] [--reportPath REPORTPATH]
-                [--debug]
+                [--deepKP DEEPKP] [--debug]
                 TARGET REPORTTYPE
 
 Analyse all protein alignment .fasta files from a target.
@@ -28,6 +28,7 @@ optional arguments:
                         Output report custom file name.
   --reportPath REPORTPATH
                         Output report custom file path.
+  --deepKP DEEPKP       Custom keyphrase to detect sequences to get deep.
   --debug               Turn debug messages on.
 ```
 
