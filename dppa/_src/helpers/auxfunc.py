@@ -53,7 +53,7 @@ class AuxFuncPack:
 
         return unknown_aminos, known_aminos
 
-    def deep_searcher(self, fasta_folder, fasta_list, col_num, df_alert, unknown_aminos):
+    def deep_searcher(self, fasta_folder, fasta_list, col_num, df_alert, unknown_aminos, deepable_keyphrase):
         # create local root
         loc_root = AnyNode(name='LocRoot', amino='LocRootAmino')
         # create nodes from column number
@@ -67,7 +67,7 @@ class AuxFuncPack:
         for node in loc_root.children:
             # check if amino is possibly deepable
             if node.amino in unknown_aminos:
-                if 'consensus sequence' in node.name and node.amino not in ['-', '?']: 
+                if deepable_keyphrase in node.name and node.amino not in ['-', '?']: 
                     # non-gap deepable char
                     fasta_dict = dict(fasta_list)
                     # check previous number of gaps from sequence
@@ -75,11 +75,13 @@ class AuxFuncPack:
                     # shift column number to the correct one
                     shifted_col_num = col_num-num_gaps
                     # get fasta_list of this node's original sequence
-                    deeper_fn = node.name.replace(' consensus sequence','') + '.fasta'
+                    deeper_fn = node.name.replace((' ' + deepable_keyphrase),'') + '.fasta'
                     deeper_path = str(fasta_folder) + '/' + deeper_fn
                     deeper_list = self.fasta_to_list(deeper_path)
                     # go deeper
-                    deeper_result = self.deep_searcher(fasta_folder, deeper_list, shifted_col_num, df_alert, unknown_aminos)
+                    deeper_result = self.deep_searcher(
+                        fasta_folder, deeper_list, shifted_col_num, df_alert, unknown_aminos, deepable_keyphrase
+                    )
                     deeper_result[0].parent = node
                     df_alert = deeper_result[1]
                 else:

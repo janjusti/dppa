@@ -9,7 +9,7 @@ def _main():
     _cmh.start_main()
 
 def run(target_path):
-    return _cmh.start_run(target_path)
+    return _cmh.start_run(target_path, deepable_keyphrase='consensus sequence')
 
 def export(results_df_list, report_type, report_name, report_path='.'):
     _cmh.start_export(results_df_list, report_type, report_name, report_path)
