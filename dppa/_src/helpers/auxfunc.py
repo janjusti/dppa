@@ -53,7 +53,7 @@ class AuxFuncPack:
 
         return unknown_aminos, known_aminos
 
-    def deep_searcher(self, fasta_folder, fasta_list, col_num, df_alert, unknown_aminos, deepable_keyphrase):
+    def deep_searcher(self, fasta_folder, fasta_list, col_num, df_alert, unknown_aminos, searchable_keyphrase):
         # create local root
         loc_root = AnyNode(name='LocRoot', amino='LocRootAmino')
         # create nodes from column number
@@ -65,27 +65,27 @@ class AuxFuncPack:
             )
         # run through nodes
         for node in loc_root.children:
-            # check if amino is possibly deepable
+            # check if amino is possibly searchable
             if node.amino in unknown_aminos:
-                if deepable_keyphrase in node.name and node.amino not in ['-', '?']: 
-                    # non-gap deepable char
+                if searchable_keyphrase in node.name and node.amino not in ['-', '?']: 
+                    # non-gap searchable char
                     fasta_dict = dict(fasta_list)
                     # check previous number of gaps from sequence
                     num_gaps = fasta_dict[node.name][:col_num].count('-')
                     # shift column number to the correct one
                     shifted_col_num = col_num-num_gaps
                     # get fasta_list of this node's original sequence
-                    deeper_fn = node.name.replace((' ' + deepable_keyphrase),'') + '.fasta'
+                    deeper_fn = node.name.replace((' ' + searchable_keyphrase),'') + '.fasta'
                     deeper_path = str(fasta_folder) + '/' + deeper_fn
                     deeper_list = self.fasta_to_list(deeper_path)
                     # go deeper
                     deeper_result = self.deep_searcher(
-                        fasta_folder, deeper_list, shifted_col_num, df_alert, unknown_aminos, deepable_keyphrase
+                        fasta_folder, deeper_list, shifted_col_num, df_alert, unknown_aminos, searchable_keyphrase
                     )
                     deeper_result[0].parent = node
                     df_alert = deeper_result[1]
                 else:
-                    # non-deepable char, increment on df_alert
+                    # non-searchable char, increment on df_alert
                     df_alert = self.add_alert_on_df(
                         df_alert, 
                         node.name,
@@ -106,8 +106,8 @@ class AuxFuncPack:
         aminos_levels = [x for x in aminos_levels if x]
         # run through levels
         deepables = [*unknown_aminos]
-        deepables.remove('?') # '?' is not deepable
-        deepables.remove('-') # '-' is not deepable
+        deepables.remove('?') # '?' is not searchable
+        deepables.remove('-') # '-' is not searchable
         aminos_dict = {}
         for target_amino in aminos_list:
             total_perc = 0

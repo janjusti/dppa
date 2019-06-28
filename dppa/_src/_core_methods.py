@@ -27,7 +27,7 @@ class CoreMethods:
             '--reportPath', help='Output report custom file path.'
         )
         parser.add_argument(
-            '--deepKP', help='Custom keyphrase to detect sequences to get deep.'
+            '--searchKP', help='Custom keyphrase to detect searchable sequences.'
         )
         parser.add_argument(
             '--debug', help='Turn debug messages on.', action='store_true'
@@ -36,7 +36,7 @@ class CoreMethods:
         # config logging
         self.set_debug_mode(args['debug'])
         # run
-        deepable_keyphrase = args['deepKP'] if (args['deepKP'] is not None) else 'consensus sequence'
+        deepable_keyphrase = args['searchKP'] if (args['searchKP'] is not None) else 'consensus sequence'
         results_df_list = self.start_run(args['target'], deepable_keyphrase)
         # export dfs
         target_fn = PurePath(args['target']).name
@@ -47,7 +47,7 @@ class CoreMethods:
         )
         logging.debug('Done.')
     
-    def start_run(self, target_path, deepable_keyphrase):
+    def start_run(self, target_path, searchable_keyphrase):
         # run analyser
         logging.debug(f'Starting analysis for {target_path}')
         # create handler of custom functions
@@ -67,7 +67,7 @@ class CoreMethods:
         isDebugModeActive = logging.getLogger().isEnabledFor(logging.DEBUG)
         for current_col in tqdm(range(0, number_columns), disable=not isDebugModeActive):
             root, df_alert_results = auxf_handler.deep_searcher(
-                target_folder, target_list, current_col, df_alert_results, unknown_aminos, deepable_keyphrase
+                target_folder, target_list, current_col, df_alert_results, unknown_aminos, searchable_keyphrase
             )
             # get root list of elements
             amino_leaves = []
