@@ -1,4 +1,4 @@
-DPPA (Deep Protein Polarity Analyser)
+Deep Protein Polarity Analyser (DPPA)
 =====================================
 
 Installation
@@ -13,7 +13,7 @@ CLI:
 
 ```bash
 usage: run-dppa [-h] [--reportName REPORTNAME] [--reportPath REPORTPATH]
-                [--deepKP DEEPKP] [--debug]
+                [--searchKP SEARCHKP] [--debug]
                 TARGET REPORTTYPE
 
 Analyse all protein alignment .fasta files from a target.
@@ -28,7 +28,7 @@ optional arguments:
                         Output report custom file name.
   --reportPath REPORTPATH
                         Output report custom file path.
-  --deepKP DEEPKP       Custom keyphrase to detect sequences to get deep.
+  --searchKP SEARCHKP   Custom keyphrase to detect searchable sequences.
   --debug               Turn debug messages on.
 ```
 
