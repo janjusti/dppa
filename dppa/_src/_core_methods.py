@@ -39,9 +39,8 @@ class CoreMethods:
         searchable_keyphrase = args['searchKP'] if (args['searchKP'] is not None) else 'consensus sequence'
         results_df_list = self.start_run(args['target'], searchable_keyphrase)
         # export dfs
-        target_fn = PurePath(args['target']).name
         report_path = args['reportPath'] if (args['reportPath'] is not None) else PurePath(args['target']).parent
-        report_name = args['reportName'] if (args['reportName'] is not None) else target_fn
+        report_name = args['reportName'] if (args['reportName'] is not None) else PurePath(args['target']).name
         self.start_export(
             results_df_list, args['reportType'], report_name, report_path
         )
