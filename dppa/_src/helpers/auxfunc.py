@@ -29,7 +29,7 @@ class AuxFuncPack:
     def add_alert_on_df(self, df_alert, seq_name, col_num, alert_type_str):
         df_alert = df_alert.append(
             {
-                'SeqName': seq_name.replace('_', ' '),
+                'SeqName': seq_name,
                 'ColNum': col_num+1,
                 'AlertType': alert_type_str
             }
