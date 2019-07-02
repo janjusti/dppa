@@ -100,7 +100,8 @@ class CoreMethods:
                         'PossibleAminos': aminos_dict,
                         'PossiblePols': pols_dict,
                         'PolScore': curr_pol_score
-                    }, ignore_index=True)
+                    }, ignore_index=True
+                )
         results_df_list = [df_pol_results, df_alert_results]
         return results_df_list
 

@@ -4,7 +4,7 @@ from StyleFrame import StyleFrame, Styler, utils
 
 class DfExporter():
     def export_dfs(self, results_df_list, report_type, report_name, report_path):
-        ### export alerts and pols df to csv
+        ### export alerts and pols df to csv/xls
         folder_path = Path.cwd() / report_path / report_name
         # extract dfs from list
         [df_pol_results, df_alert_results] = results_df_list
