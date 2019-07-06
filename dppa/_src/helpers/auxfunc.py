@@ -148,7 +148,7 @@ class AuxFuncPack:
             sum_scores += df_pols.loc[df_pols['Type'] == curr_pol[0], 'Score'].values[0]
         # calculate
         pol_list_size = len(pols_percs)
-        if pol_list_size is 1:
+        if pol_list_size <= 1:
             pol_score = 0
         else:
             # get minimal value of perc
