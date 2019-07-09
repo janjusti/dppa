@@ -169,10 +169,10 @@ class AuxFuncPack:
                 sum_new_values += new_value
             if sum_new_values == 1-decimal_limit:
                 min_key = min(curr_new_dict, key=curr_new_dict.get)
-                curr_new_dict[min_key] += decimal_limit
+                curr_new_dict[min_key] = round(curr_new_dict[min_key] + decimal_limit, digits)
             elif sum_new_values == 1+decimal_limit:
                 max_key = max(curr_new_dict, key=curr_new_dict.get)
-                curr_new_dict[max_key] -= decimal_limit
+                curr_new_dict[max_key] = round(curr_new_dict[max_key] - decimal_limit, digits)
             new_dicts.append(curr_new_dict)
 
         return new_dicts
