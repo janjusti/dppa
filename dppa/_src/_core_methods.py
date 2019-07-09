@@ -94,9 +94,8 @@ class CoreMethods:
                 # get polarity score
                 curr_pol_score = auxf_handler.get_pol_score(pols_dict, df_pols)
                 # round dict values
-                [aminos_dict, pols_dict] = auxf_handler.round_dicts_values(
-                    [aminos_dict, pols_dict], 5
-                )
+                aminos_dict = auxf_handler.round_dict_values(aminos_dict, 5, True)
+                pols_dict = auxf_handler.round_dict_values(pols_dict, 5, True)
                 # increment on df_pol_results
                 df_pol_results = df_pol_results.append(
                     {

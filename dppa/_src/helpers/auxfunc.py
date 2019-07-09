@@ -157,22 +157,19 @@ class AuxFuncPack:
 
         return pol_score
 
-    def round_dicts_values(self, old_dicts, digits):
-        new_dicts = []
+    def round_dict_values(self, old_dict, digits, isCompareNeeded):
         decimal_limit = 10**(-digits)
-        for curr_old_dict in old_dicts:
-            curr_new_dict = {}
-            sum_new_values = 0
-            for curr_key, curr_value in curr_old_dict.items():
-                new_value = round(curr_value, digits)
-                curr_new_dict[curr_key] = new_value
-                sum_new_values += new_value
-            if sum_new_values == 1-decimal_limit:
-                min_key = min(curr_new_dict, key=curr_new_dict.get)
-                curr_new_dict[min_key] = round(curr_new_dict[min_key] + decimal_limit, digits)
-            elif sum_new_values == 1+decimal_limit:
-                max_key = max(curr_new_dict, key=curr_new_dict.get)
-                curr_new_dict[max_key] = round(curr_new_dict[max_key] - decimal_limit, digits)
-            new_dicts.append(curr_new_dict)
-
-        return new_dicts
+        new_dict = {}
+        sum_new_values = 0
+        for curr_key, curr_value in old_dict.items():
+            new_value = round(curr_value, digits)
+            new_dict[curr_key] = new_value
+            sum_new_values += new_value
+        if sum_new_values == 1-decimal_limit and isCompareNeeded:
+            min_key = min(new_dict, key=new_dict.get)
+            new_dict[min_key] = round(new_dict[min_key] + decimal_limit, digits)
+        elif sum_new_values == 1+decimal_limit and isCompareNeeded:
+            max_key = max(new_dict, key=new_dict.get)
+            new_dict[max_key] = round(new_dict[max_key] - decimal_limit, digits)
+            
+        return new_dict
