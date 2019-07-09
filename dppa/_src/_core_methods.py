@@ -93,6 +93,10 @@ class CoreMethods:
                 pols_dict = auxf_handler.get_polarities_perc_dict(aminos_dict, df_pols)
                 # get polarity score
                 curr_pol_score = auxf_handler.get_pol_score(pols_dict, df_pols)
+                # round dict values
+                [aminos_dict, pols_dict] = auxf_handler.round_dicts_values(
+                    [aminos_dict, pols_dict], 5
+                )
                 # increment on df_pol_results
                 df_pol_results = df_pol_results.append(
                     {

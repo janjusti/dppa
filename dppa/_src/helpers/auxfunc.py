@@ -118,7 +118,7 @@ class AuxFuncPack:
                 num_of_deepables = sum(level.count(x) for x in deepables)
                 deepables_perc_on_lvl = (num_of_deepables/len(level))
                 deepness_perc = deepness_perc * deepables_perc_on_lvl
-            aminos_dict[target_amino] = round(total_perc,3)
+            aminos_dict[target_amino] = total_perc
 
         return aminos_dict
     
@@ -134,7 +134,7 @@ class AuxFuncPack:
         # convert into unified dict
         pols_dict = {}
         for key, value in list_percs:
-            pols_dict[key] = round(pols_dict.get(key, 0) + value, 3)
+            pols_dict[key] = pols_dict.get(key, 0) + value
 
         return pols_dict
 
@@ -153,6 +153,26 @@ class AuxFuncPack:
         else:
             # get minimal value of perc
             min_pols = min(pols_percs, key = lambda t: t[1])[1]
-            pol_score = round(sum_scores*3 + pol_list_size*0.6 + min_pols, 4)
+            pol_score = round(sum_scores*3 + pol_list_size*0.6 + min_pols, 5)
 
         return pol_score
+
+    def round_dicts_values(self, old_dicts, digits):
+        new_dicts = []
+        decimal_limit = 10**(-digits)
+        for curr_old_dict in old_dicts:
+            curr_new_dict = {}
+            sum_new_values = 0
+            for curr_key, curr_value in curr_old_dict.items():
+                new_value = round(curr_value, digits)
+                curr_new_dict[curr_key] = new_value
+                sum_new_values += new_value
+            if sum_new_values == 1-decimal_limit:
+                min_key = min(curr_new_dict, key=curr_new_dict.get)
+                curr_new_dict[min_key] += decimal_limit
+            elif sum_new_values == 1+decimal_limit:
+                max_key = max(curr_new_dict, key=curr_new_dict.get)
+                curr_new_dict[max_key] -= decimal_limit
+            new_dicts.append(curr_new_dict)
+
+        return new_dicts
