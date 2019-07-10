@@ -35,21 +35,21 @@ optional arguments:
 Python:
 
 ```python
-import dppa.core as pol_solver
+import dppa.core as solver
 
 target_path = 'example.fasta'
 report_name = 'myrep'
 report_type = 'xls'
 report_path = 'results-folder' # optional
 
-pol_solver.set_debug_mode(True) # optional
+solver.set_debug_mode(True) # optional
 
 # results[0] -> polarity results dataframe
 # results[1] -> alerts dataframe
-results = pol_solver.run(target_path)
+results = solver.run(target_path)
 
 # option 1: export to the current folder
-pol_solver.export(results, report_type, report_name)
+solver.export(results, report_type, report_name)
 # option 2: export to custom folder
-pol_solver.export(results, report_type, report_name, report_path)
+solver.export(results, report_type, report_name, report_path)
 ```
