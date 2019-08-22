@@ -1,15 +1,14 @@
-Deep Protein Polarity Analyser (DPPA)
-=====================================
+# Deep Protein Polarity Analyser (DPPA)
 
-Installation
-------------
+DPPA analyses each column of amino acids within .fasta files, from a target file, generating a report with all possible polarities listed.
+
+## Installation
 ```bash
 pip install dppa --user
 ```
 
-Usage
------
-CLI:
+## Usage
+### Command Line
 
 ```bash
 usage: run-dppa [-h] [--reportName REPORTNAME] [--reportPath REPORTPATH]
@@ -32,14 +31,14 @@ optional arguments:
   --debug               Turn debug messages on.
 ```
 
-Python:
+### Python
 
 ```python
 import dppa.core as solver
 
 target_path = 'example.fasta'
 report_name = 'myrep'
-report_type = 'xls'
+report_type = 'all' # 'xls', 'csv' or 'all'
 report_path = 'results-folder' # optional
 
 solver.set_debug_mode(True) # optional
