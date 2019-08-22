@@ -53,3 +53,11 @@ solver.export(results, report_type, report_name)
 # option 2: export to custom folder
 solver.export(results, report_type, report_name, report_path)
 ```
+
+---
+
+## Examples
+
+[Simple Execution](examples/example1-simple.md)
+
+[Group Execution](examples/example2-group.md)
