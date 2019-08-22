@@ -50,7 +50,7 @@ Align all sequences with any Multiple Sequence Alignment (MSA) software. In this
 Alignment simple-unaligned.fasta > simple.fasta done.
 ```
 
-Finally, analysis results are obtained from dcma's solver.
+Finally, analysis results are obtained from dppa's solver.
 
 ```python
 >>> results = solver.run('simple.fasta')
@@ -69,7 +69,7 @@ Finally, analysis results are obtained from dcma's solver.
 
 ### `simple-alerts.csv`
 
-All gaps and unidentified codons are listed in this file.
+All gaps and unidentified amino acids are listed in this file.
 
 | SeqName                                                    | ColNum | AlertType |
 |------------------------------------------------------------|--------|-----------|

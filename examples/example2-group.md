@@ -6,11 +6,11 @@ Open terminal and create a new folder.
 mkdir dppa-examples
 ```
 
-Get inside `dppa-examples` and download `ExGroups` module.
+Get inside `dppa-examples` and download `ExGroup` module.
 
 ```bash
 cd dppa-examples
-wget https://github.com/janjusti/dppa/raw/master/example/ExGroups.py
+wget https://github.com/janjusti/dppa/raw/master/example/ExGroup.py
 ```
 
 Open Python3 from terminal.
@@ -23,10 +23,10 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>> 
 ```
 
-Import all functions from `ExGroups` module.
+Import all functions from `ExGroup` module.
 
 ```python
->>> from ExGroups import *
+>>> from ExGroup import *
 ```
 
 This example will use four different genes of HPV 16 (E6), extracted from [GenBank](https://www.ncbi.nlm.nih.gov/genbank/) and identified arbitrarily as Group A ([AGM34409.1](https://www.ncbi.nlm.nih.gov/protein/AGM34409.1) and [AGM34408.1](https://www.ncbi.nlm.nih.gov/protein/AGM34408.1)) and Group B ([AIQ82784.1](https://www.ncbi.nlm.nih.gov/protein/AIQ82784.1) and [AIQ82783.1](https://www.ncbi.nlm.nih.gov/protein/AIQ82783.1)).
@@ -73,9 +73,9 @@ Align all consensus sequences from previous step.
 Alignment groupAB-cons.fasta > groups-target.fasta done.
 ```
 
-In this example, "any sentence" is being used as *searchable keyphrase*. If there is any unrecognised amino acid (containing any symbol [not recognised by IUPAC](https://www.bioinformatics.org/sms2/iupac.html)) in any consensus sequence, DPPA will search for matching amino acids in original files. 
+In this example, "any sentence" is being used as *searchable keyphrase*. If there is any unrecognised amino acid (any symbol [not recognised by IUPAC](https://www.bioinformatics.org/sms2/iupac.html)) in any consensus sequence, DPPA will search for matching amino acids in original files. 
 
-*e.g.*: an unrecognised amino acid (X, position 32) is found in `groupB_any_sentence` sequence. DCMA will look into `groupB.fasta` to check which amino acids X could be.
+*e.g.*: an unrecognised amino acid (X, position 32) is found in `groupB_any_sentence` sequence. DPPA will look into `groupB.fasta` to check which amino acids X could be.
 
 This feature works for any amount of levels, as long as the sequence's name containing an unrecognised amino acid has a searchable keyphrase settled. If there is not any other searchable sequence to check, this unrecognised amino acid will be considered as "pure" in `alerts`.
 
@@ -88,7 +88,7 @@ Finally, analysis results are obtained from dppa's solver.
 
 ## Output ([More details](../docs/report-exp.md))
 
-### `groups-muts.csv`
+### `groups-pols.csv`
 
 | ColNum | PossibleAminos               | PossiblePols                   | PolScore |
 |--------|------------------------------|--------------------------------|----------|
@@ -97,7 +97,7 @@ Finally, analysis results are obtained from dppa's solver.
 
 ### `groups-alerts.csv`
 
-All gaps and unidentified codons are listed in this file.
+All gaps and unidentified amino acids are listed in this file.
 
 | SeqName             | ColNum | AlertType |
 |---------------------|--------|-----------|
