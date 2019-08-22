@@ -73,7 +73,7 @@ Align all consensus sequences from previous step.
 Alignment groupAB-cons.fasta > groups-target.fasta done.
 ```
 
-In this example, "any sentence" is being used as *searchable keyphrase*. If there is any unrecognised amino acid (any symbol [not recognised by IUPAC](https://www.bioinformatics.org/sms2/iupac.html)) in any consensus sequence, DPPA will search for matching amino acids in original files. 
+In this example, "any sentence" is being used as *searchable keyphrase*. If there is any unrecognised amino acid (any non-generic symbol [not recognised by IUPAC](https://www.bioinformatics.org/sms2/iupac.html)) in any consensus sequence, DPPA will search for matching amino acids in original files. 
 
 *e.g.*: an unrecognised amino acid (X, position 32) is found in `groupB_any_sentence` sequence. DPPA will look into `groupB.fasta` to check which amino acids X could be.
 

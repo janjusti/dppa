@@ -1,6 +1,6 @@
 #### `ColNum`
 
-First position of mutated amino acid, starting from 1. For example, `ColNum` 16 would be related to every amino acid in position 16 in .fasta target file.
+Position of mutated amino acid, starting from 1. For example, `ColNum` 16 would be related to every amino acid in position 16 in .fasta target file.
 
 #### `PossibleAminos`
 
