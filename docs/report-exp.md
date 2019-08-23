@@ -4,7 +4,7 @@ Position of mutated amino acid, starting from 1. For example, `ColNum` 16 would 
 
 #### `PossibleAminos`
 
-Percentage values dictionary showing the proportion of each amino acid on `ColNum`. Only recognized amino acids are listed in `PossibleAminos`; gaps and unidentified amino acids are also considered, but not shown (see `alerts` instead).
+Percentage values dictionary showing the proportion of each amino acid on `ColNum`. Only recognized amino acids are listed in `PossibleAminos`; gaps and unidentified amino acids are also considered into proportion, but not shown (see `alerts` instead).
 
 #### `PossiblePols`
 

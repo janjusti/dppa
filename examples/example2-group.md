@@ -10,7 +10,7 @@ Get inside `dppa-examples` and download `ExGroup` module.
 
 ```bash
 cd dppa-examples
-wget https://github.com/janjusti/dppa/raw/master/example/ExGroup.py
+wget https://github.com/janjusti/dppa/raw/master/examples/ExGroup.py
 ```
 
 Open Python3 from terminal.
@@ -73,13 +73,13 @@ Align all consensus sequences from previous step.
 Alignment groupAB-cons.fasta > groups-target.fasta done.
 ```
 
-In this example, "any sentence" is being used as *searchable keyphrase*. If there is any unrecognised amino acid (any non-generic symbol [not recognised by IUPAC](https://www.bioinformatics.org/sms2/iupac.html)) in any consensus sequence, DPPA will search for matching amino acids in original files. 
+In this example, "any sentence" is being used as *searchable keyphrase*. If there is any unrecognised amino acid (any non-specific symbol, including those [recognised by IUPAC](https://www.bioinformatics.org/sms2/iupac.html)) in any consensus sequence, DPPA will search for matching amino acids in original files. 
 
-*e.g.*: an unrecognised amino acid (X, position 32) is found in `groupB_any_sentence` sequence. DPPA will look into `groupB.fasta` to check which amino acids X could be.
+**e.g.**: an unrecognised amino acid (X, position 32) is found in `groupB_any_sentence` sequence. DPPA will look into `groupB.fasta` to check which amino acids X could be.
 
 This feature works for any amount of levels, as long as the sequence's name containing an unrecognised amino acid has a searchable keyphrase settled. If there is not any other searchable sequence to check, this unrecognised amino acid will be considered as "pure" in `alerts`.
 
-Finally, analysis results are obtained from dppa's solver.
+Finally, analysis results are obtained from DPPA's solver.
 
 ```python
 >>> results = solver.run('groups-target.fasta', searchable_keyphrase='any sentence')

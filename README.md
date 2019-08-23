@@ -4,8 +4,13 @@ DPPA analyses each column of amino acids within .fasta files, from a target file
 
 ## Installation
 ```bash
-pip install dppa --user
+pip install dppa
 ```
+
+## Examples
+
+- [Simple Execution](examples/example1-simple.md)
+- [Group Execution](examples/example2-group.md)
 
 ## Usage
 ### Command Line
@@ -52,11 +57,3 @@ solver.export(results, report_type, report_name)
 # option 2: export to custom folder
 solver.export(results, report_type, report_name, report_path)
 ```
-
----
-
-## Examples
-
-[Simple Execution](examples/example1-simple.md)
-
-[Group Execution](examples/example2-group.md)

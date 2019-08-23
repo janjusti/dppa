@@ -10,7 +10,7 @@ Get inside `dppa-examples` and download `ExSimple` module.
 
 ```bash
 cd dppa-examples
-wget https://github.com/janjusti/dppa/raw/master/example/ExSimple.py
+wget https://github.com/janjusti/dppa/raw/master/examples/ExSimple.py
 ```
 
 Open Python3 from terminal.
@@ -50,7 +50,7 @@ Align all sequences with any Multiple Sequence Alignment (MSA) software. In this
 Alignment simple-unaligned.fasta > simple.fasta done.
 ```
 
-Finally, analysis results are obtained from dppa's solver.
+Finally, analysis results are obtained from DPPA's solver.
 
 ```python
 >>> results = solver.run('simple.fasta')
