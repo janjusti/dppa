@@ -8,7 +8,7 @@ Percentage values dictionary showing the proportion of each amino acid on `ColNu
 
 #### `PossiblePols`
 
-Percentage values dictionary showing the proportion of polarity from each amino acid listed on `PossibleAminos`. Score values are used to calculate `PolScore`.
+Percentage values dictionary showing the proportion of polarity from all amino acid listed on `PossibleAminos`. Score values are used to calculate `PolScore`.
 
 | Type | Name               | Score |
 |------|--------------------|-------|

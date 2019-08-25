@@ -75,7 +75,7 @@ Alignment groupAB-cons.fasta > groups-target.fasta done.
 
 In this example, "any sentence" is being used as *searchable keyphrase*. If there is any unrecognised amino acid (any non-specific symbol, including those [recognised by IUPAC](https://www.bioinformatics.org/sms2/iupac.html)) in any consensus sequence, DPPA will search for matching amino acids in original files. 
 
-**e.g.**: an unrecognised amino acid (X, position 32) is found in `groupB_any_sentence` sequence. DPPA will look into `groupB.fasta` to check which amino acids X could be.
+**e.g.**: an unrecognised amino acid (X, position 32) is found in `groupB_any_sentence` sequence from `groups-target.fasta`. In this specific case, DPPA will look into `groupB.fasta`, which is `groupB_any_sentence` original reference by removing "any sentence" from sequence name, to check which amino acids X could be.
 
 This feature works for any amount of levels, as long as the sequence's name containing an unrecognised amino acid has a searchable keyphrase settled. If there is not any other searchable sequence to check, this unrecognised amino acid will be considered as "pure" in `alerts`.
 
@@ -83,19 +83,19 @@ Finally, analysis results are obtained from DPPA's solver.
 
 ```python
 >>> results = solver.run('groups-target.fasta', searchable_keyphrase='any sentence')
->>> solver.export(results, 'csv', 'groups')
+>>> solver.export(results, 'csv', 'groupsResult')
 ```
 
 ## Output ([More details](../docs/report-exp.md))
 
-### `groups-pols.csv`
+### `groupsResult-pols.csv`
 
 | ColNum | PossibleAminos               | PossiblePols                   | PolScore |
 |--------|------------------------------|--------------------------------|----------|
 | 32     | "\{'D': 0\.75, 'H': 0\.25\}" | "\{'Pp': 0\.25, 'Pn': 0\.75\}" | 7\.45    |
 | 90     | "\{'V': 0\.25, 'L': 0\.75\}" | \{'Np': 1\.0\}                 | 0\.0     |
 
-### `groups-alerts.csv`
+### `groupsResult-alerts.csv`
 
 All gaps and unidentified amino acids are listed in this file.
 

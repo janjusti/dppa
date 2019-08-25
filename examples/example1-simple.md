@@ -36,30 +36,30 @@ Generate .fasta file from ID list.
 ```python
 >>> id_list = ['AGM34409.1', 'AGM34408.1', 'AIQ82784.1', 'AIQ82783.1']
 >>> generate_fasta_from_ids(id_list, 'simple-unaligned.fasta')
-KC662553.1 successfully fetched.
-KC662552.1 successfully fetched.
-KM058604.1 successfully fetched.
-KM058603.1 successfully fetched.
+AGM34409.1 successfully fetched.
+AGM34408.1 successfully fetched.
+AIQ82784.1 successfully fetched.
+AIQ82783.1 successfully fetched.
 simple-unaligned.fasta sucessfully created.
 ```
 
 Align all sequences with any Multiple Sequence Alignment (MSA) software. In this case, [MUSCLE](https://www.drive5.com/muscle/) is used.
 
 ```python
->>> align_via_muscle('simple-unaligned.fasta', 'simple.fasta')
-Alignment simple-unaligned.fasta > simple.fasta done.
+>>> align_via_muscle('simple-unaligned.fasta', 'simple-target.fasta')
+Alignment simple-unaligned.fasta > simple-target.fasta done.
 ```
 
 Finally, analysis results are obtained from DPPA's solver.
 
 ```python
->>> results = solver.run('simple.fasta')
->>> solver.export(results, 'csv', 'simple')
+>>> results = solver.run('simple-target.fasta')
+>>> solver.export(results, 'csv', 'simpleResult')
 ```
 
 ## Output ([More details](../docs/report-exp.md))
 
-### `simple-pols.csv`
+### `simpleResult-pols.csv`
 
 | ColNum | PossibleAminos               | PossiblePols                   | PolScore |
 |--------|------------------------------|--------------------------------|----------|
@@ -67,7 +67,7 @@ Finally, analysis results are obtained from DPPA's solver.
 | 90     | "\{'L': 0\.75, 'V': 0\.25\}" | \{'Np': 1\.0\}                 | 0\.0     |
 
 
-### `simple-alerts.csv`
+### `simpleResult-alerts.csv`
 
 All gaps and unidentified amino acids are listed in this file.
 
